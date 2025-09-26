@@ -1,0 +1,60 @@
+// ======= State & i18n =======
+const state = {
+  theme: localStorage.getItem('theme') || 'onyx',
+  lang: localStorage.getItem('lang') || 'es',
+  apps: [
+    {
+      id: 'astrodia',
+      nombre: { es: 'AstroDía', en: 'AstroDay' },
+      descripcion: {
+        es: 'Horóscopos diarios con animaciones, música y monetización con AdMob.',
+        en: 'Daily horoscopes with animations, music, and AdMob monetization.'
+      },
+      plataformas: ['android'],
+      tags: ['Contenido', 'Animaciones', 'Monetización'],
+      links: { play: '#', repo: '#' }
+    },
+    {
+      id: 'rovecast',
+      nombre: { es: 'RoveCast', en: 'RoveCast' },
+      descripcion: {
+        es: 'Radio online global: favoritos, temporizador, Chromecast y anuncios controlados.',
+        en: 'Global online radio: favorites, sleep timer, Chromecast and gentle ads.'
+      },
+      plataformas: ['android', 'web'],
+      tags: ['Streaming', 'Chromecast', 'AdMob'],
+      links: { play: '#', repo: '#' }
+    },
+    {
+      id: 'chistazo',
+      nombre: { es: 'Chistazo Diario', en: 'Daily Chuckles' },
+      descripcion: {
+        es: 'Chistes por categorías, API y modo sin conexión, interstitials éticos.',
+        en: 'Jokes by category, API and offline mode, with ethical interstitials.'
+      },
+      plataformas: ['android'],
+      tags: ['API', 'Share', 'AdMob'],
+      links: { play: '#', repo: '#' }
+    },
+    {
+      id: 'gemas',
+      nombre: { es: 'Gemas Místicas', en: 'Mystic Gems' },
+      descripcion: {
+        es: 'Match-3 con bombas, cascadas y efectos; arte estilo candy world.',
+        en: 'Match-3 with bombs, cascades and effects; candy-world art style.'
+      },
+      plataformas: ['game', 'android'],
+      tags: ['Juego', 'FX', 'Optimización'],
+      links: { play: '#', repo: '#' }
+    },
+    {
+      id: 'maya',
+      nombre: { es: 'Maya Adventure', en: 'Maya Adventure' },
+      descripcion: {
+        es: 'Plataformas 2D, controles táctiles, arte pixel y niveles progresivos.',
+        en: '2D platformer, touch controls, pixel art and progressive levels.'
+      },
+      plataformas: ['game', 'android'],
+      tags: ['Pixel Art', 'Platformer'],
+      links: { play: '#', repo: '#' }
+    },

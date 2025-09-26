@@ -58,6 +58,7 @@ html[data-theme="neon"] { /* Neon Matrix (futurista) */
 /* global */
 *{box-sizing:border-box}
 html,body{height:100%}
+html{scroll-behavior:smooth}
 body{
   margin:0; color:var(--text); background:var(--bg); font-family:var(--font-sans);
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
@@ -100,6 +101,16 @@ a:focus-visible, button:focus-visible, .select:focus-visible, .input:focus-visib
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important}
+}
+
+/* Subtle nav link underline */
+.nav-links a{position:relative}
+.nav-links a::after{content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .2s ease}
+.nav-links a:hover::after{width:100%}
 
 @media (max-width:900px){
   .nav-links{display:none}
@@ -171,3 +182,6 @@ a:focus-visible, button:focus-visible, .select:focus-visible, .input:focus-visib
 }
 .footer a{color:var(--muted)}
 .foot-left,.foot-right{display:flex; gap:.8rem; align-items:center; flex-wrap:wrap}
+
+/* Selection styling */
+::selection{background: color-mix(in oklab, var(--accent), var(--accent-2) 50%); color:#0b0d10}
