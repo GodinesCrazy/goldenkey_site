@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://goldenkeystudios.netlify.app/sitemap.xml

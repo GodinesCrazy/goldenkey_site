@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="onyx">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoldenKey Studios — Desarrollo de Apps & Juegos</title>
+  <meta name="description" content="GoldenKey Studios: desarrollo de apps Android, juegos 2D y soluciones con IA. Sitio bilingüe ES/EN.">
+  <link rel="canonical" href="https://goldenkeystudios.netlify.app/" />
+  <meta property="og:title" content="GoldenKey Studios — Apps & Juegos" />
+  <meta property="og:description" content="Estudio especializado en apps, juegos y experiencias con IA." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/img/og-cover.png" />
+  <meta property="og:url" content="https://goldenkeystudios.netlify.app/" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GoldenKey Studios — Apps & Juegos" />
+  <meta name="twitter:description" content="Desarrollo de apps Android, juegos 2D y soluciones con IA." />
+  <meta name="twitter:image" content="assets/img/og-cover.png" />
+  <meta name="theme-color" content="#F6D365" />
+  <link rel="icon" href="assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#inicio" aria-label="Inicio">
+      <img src="assets/img/logo.svg" alt="" width="28" height="28" />
+      <span id="brandName">GoldenKey Studios</span>
+    </a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="#apps" id="navApps" data-i18n="nav.apps">Apps</a>
+      <a href="#servicios" id="navServices" data-i18n="nav.services">Servicios</a>
+      <a href="#sobre" id="navAbout" data-i18n="nav.about">Sobre nosotros</a>
+      <a href="#contacto" id="navContact" data-i18n="nav.contact">Contacto</a>
+    </nav>
+    <div class="nav-ctas">
+      <select id="themeSelect" class="select" aria-label="Cambiar tema">
+        <option value="onyx">Onyx Pro (Oscuro)</option>
+        <option value="aurora">Aurora Gradient</option>
+        <option value="glass">Glass Noir</option>
+        <option value="neo">NeoBrutalist Pop</option>
+        <option value="neon">Neon Matrix</option>
+      </select>
+      <select id="langSelect" class="select" aria-label="Cambiar idioma">
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+      </select>
+      <a class="btn primary" href="#contacto" id="ctaTalk" data-i18n="cta.talk">Hablemos</a>
+      <button class="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu" hidden>
+      <a href="#apps" data-i18n="nav.apps">Apps</a>
+      <a href="#servicios" data-i18n="nav.services">Servicios</a>
+      <a href="#sobre" data-i18n="nav.about">Sobre nosotros</a>
+      <a href="#contacto" data-i18n="nav.contact">Contacto</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="hero">
+    <div class="hero-content">
+      <p class="kicker" id="heroKicker" data-i18n="hero.kicker">Estudio de producto</p>
+      <h1 id="heroTitle" data-i18n="hero.title">Creamos <span class="accent">apps</span> y <span class="accent">juegos</span> que la gente ama.</h1>
+      <p class="lede" id="heroLede" data-i18n="hero.lede">Android nativo, juegos 2D y soluciones con IA. Performance real, monetización ética y diseño impecable.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#apps" id="heroSeeProjects" data-i18n="hero.seeProjects">Ver proyectos</a>
+        <a class="btn ghost" href="assets/CV_GoldenKey_Studios.pdf" download id="heroDownloadCV" data-i18n="hero.downloadCV">Descargar dossier</a>
+      </div>
+      <div class="hero-stats" role="list">
+        <div class="stat" role="listitem"><strong id="statApps">10+</strong><span id="statAppsLabel" data-i18n="stats.apps">Apps publicadas</span></div>
+        <div class="stat" role="listitem"><strong id="statYears">7+</strong><span id="statYearsLabel" data-i18n="stats.years">Años creando</span></div>
+        <div class="stat" role="listitem"><strong id="statRating">4.7★</strong><span id="statRatingLabel" data-i18n="stats.rating">Valoración media</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="assets/img/hero-mock.svg" alt="Previsualización de apps destacadas" />
+    </div>
+  </main>
+
+  <section id="apps" class="section">
+    <div class="section-header">
+      <h2 id="appsTitle" data-i18n="apps.title">Apps destacadas</h2>
+      <div class="filters">
+        <input id="searchInput" class="input" type="search" placeholder="Buscar apps..." aria-label="Buscar apps">
+        <select id="filterSelect" class="select" aria-label="Filtrar por plataforma">
+          <option value="all" data-i18n="filters.all">Todas</option>
+          <option value="android">Android</option>
+          <option value="ios">iOS</option>
+          <option value="web">Web</option>
+          <option value="game" data-i18n="filters.game">Juego</option>
+        </select>
+      </div>
+    </div>
+    <div id="appsGrid" class="grid"></div>
+  </section>
+
+  <section id="servicios" class="section">
+    <div class="section-header">
+      <h2 id="servicesTitle" data-i18n="services.title">Servicios</h2>
+    </div>
+    <div class="grid services">
+      <article class="card service">
+        <h3 data-i18n="services.android.title">Desarrollo Android</h3>
+        <p data-i18n="services.android.desc">Apps nativas (Java/Kotlin), arquitectura limpia (MVVM), APIs, AdMob y publicación en Google Play.</p>
+        <ul>
+          <li data-i18n="services.android.li1">Rendimiento y accesibilidad</li>
+          <li data-i18n="services.android.li2">Monetización ética</li>
+          <li data-i18n="services.android.li3">Automatización de builds y testing</li>
+        </ul>
+      </article>
+      <article class="card service">
+        <h3 data-i18n="services.games.title">Juegos 2D</h3>
+        <p data-i18n="services.games.desc">Match-3, plataformas y casual. Efectos, audio y arte coherente con la marca.</p>
+        <ul>
+          <li data-i18n="services.games.li1">Core loops y progresión</li>
+          <li data-i18n="services.games.li2">Analítica y LiveOps</li>
+          <li data-i18n="services.games.li3">Optimización de performance</li>
+        </ul>
+      </article>
+      <article class="card service">
+        <h3 data-i18n="services.web.title">Sitios & Landing</h3>
+        <p data-i18n="services.web.desc">Sitios ultra-rápidos y accesibles. SEO técnico, analítica y despliegue en Vercel/Netlify.</p>
+        <ul>
+          <li data-i18n="services.web.li1">Core Web Vitals</li>
+          <li data-i18n="services.web.li2">Diseño responsivo</li>
+          <li data-i18n="services.web.li3">Microinteracciones</li>
+        </ul>
+      </article>
+      <article class="card service">
+        <h3 data-i18n="services.ai.title">Integración de IA</h3>
+        <p data-i18n="services.ai.desc">Asistentes, automatizaciones y pipelines con OpenAI/Google, prompts y guardrails.</p>
+        <ul>
+          <li data-i18n="services.ai.li1">Evaluación y A/B</li>
+          <li data-i18n="services.ai.li2">Agentes multi-herramienta</li>
+          <li data-i18n="services.ai.li3">Seguridad y privacidad</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="sobre" class="section">
+    <div class="about">
+      <div>
+        <h2 id="aboutTitle" data-i18n="about.title">Sobre nosotros</h2>
+        <p id="aboutBody" data-i18n="about.body">Somos <strong>GoldenKey Studios</strong>, un estudio en Chile. Diseñamos y construimos productos móviles y juegos con obsesión por el detalle: cargas mínimas, animaciones fluidas y UX clara. También nos encargamos de monetización y publicación.</p>
+        <ul class="badges">
+          <li>Android • Java/Kotlin</li>
+          <li>AdMob & Play Billing</li>
+          <li>Juegos 2D</li>
+          <li>Integración de IA</li>
+        </ul>
+        <div class="about-ctas">
+          <a class="btn primary" href="#contacto" id="aboutAvailability" data-i18n="about.availability">Disponibilidad</a>
+          <a class="btn ghost" href="mailto:goldenkeystudios0@gmail.com">goldenkeystudios0@gmail.com</a>
+        </div>
+      </div>
+      <aside class="aside-card">
+        <h3 data-i18n="about.recogTitle">Reconocimientos</h3>
+        <ul>
+          <li data-i18n="about.recog1">⭐ Apps destacadas en la comunidad</li>
+          <li data-i18n="about.recog2">🚀 Lanzamientos con 4.7★ promedio</li>
+          <li data-i18n="about.recog3">📈 Crecimiento continuo de usuarios</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section id="contacto" class="section">
+    <div class="section-header">
+      <h2 id="contactTitle" data-i18n="contact.title">Contacto</h2>
+      <p id="contactSubtitle" data-i18n="contact.subtitle">¿Tienes un proyecto en mente? Hablemos.</p>
+    </div>
+    <form class="contact" action="mailto:goldenkeystudios0@gmail.com" method="post" enctype="text/plain">
+      <label><span data-i18n="contact.name">Nombre</span> <input id="nameInput" type="text" name="nombre" required></label>
+      <label><span data-i18n="contact.email">Email</span> <input id="emailInput" type="email" name="email" required></label>
+      <label><span data-i18n="contact.message">Mensaje</span> <textarea id="messageInput" name="mensaje" rows="4" required></textarea></label>
+      <button class="btn primary" type="submit" id="contactSend" data-i18n="contact.send">Enviar</button>
+    </form>
+  </section>
+
+  <footer class="footer">
+    <div class="foot-left">
+      <img src="assets/img/favicon.svg" alt="" width="20" height="20" />
+      <span>&copy; <span id="year"></span> GoldenKey Studios</span>
+    </div>
+    <div class="foot-right">
+      <a href="#" aria-label="GitHub">GitHub</a>
+      <a href="#" aria-label="LinkedIn">LinkedIn</a>
+      <a href="#" aria-label="Google Play">Google Play</a>
+      <a href="#" aria-label="X / Twitter">X</a>
+      <a href="/voxtide-privacy.html" aria-label="Privacidad Voxtide">Privacidad</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "GoldenKey Studios",
+    "url": "https://goldenkeystudios.netlify.app/",
+    "email": "goldenkeystudios0@gmail.com",
+    "logo": "https://goldenkeystudios.netlify.app/assets/img/logo.svg"
+  }
+  </script>
+</body>
+</html>
