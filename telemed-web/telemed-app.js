@@ -63,11 +63,13 @@ function TeleMedApp() {
         role: userType
       });
       
-      // Cargar citas simuladas
+      // Cargar citas simuladas completas para demo
       setAppointments([
-        {id: 1, patient: 'María González', doctor: 'Dr. Reyes', time: '15:20', status: 'urgent', complaint: 'Dolor torácico intermitente'},
-        {id: 2, patient: 'Ignacio Silva', doctor: 'Dr. Reyes', time: '16:00', status: 'scheduled', complaint: 'Control post-operatorio'},
-        {id: 3, patient: 'Claudia Torres', doctor: 'Dr. Reyes', time: '16:30', status: 'routine', complaint: 'Seguimiento hipertensión'}
+        {id: 1, patient: 'María González', doctor: 'Dr. Andrés Reyes', time: '15:20', date: '2025-10-27', status: 'urgent', complaint: 'Dolor torácico intermitente', patientName: 'María González'},
+        {id: 2, patient: 'Ignacio Silva', doctor: 'Dr. Andrés Reyes', time: '16:00', date: '2025-10-27', status: 'scheduled', complaint: 'Control post-operatorio', patientName: 'Ignacio Silva'},
+        {id: 3, patient: 'Claudia Torres', doctor: 'Dr. Andrés Reyes', time: '16:30', date: '2025-10-27', status: 'routine', complaint: 'Seguimiento hipertensión', patientName: 'Claudia Torres'},
+        {id: 4, patient: 'Roberto Mendoza', doctor: 'Dr. Andrés Reyes', time: '17:00', date: '2025-10-27', status: 'scheduled', complaint: 'Consulta cardiológica preventiva', patientName: 'Roberto Mendoza'},
+        {id: 5, patient: 'Ana Martínez', doctor: 'Dr. Andrés Reyes', time: '17:30', date: '2025-10-27', status: 'routine', complaint: 'Control diabetes tipo 2', patientName: 'Ana Martínez'}
       ]);
       
       setAlert({ type: 'success', message: '✅ TeleMed Sistema Hospitalario cargado' });
