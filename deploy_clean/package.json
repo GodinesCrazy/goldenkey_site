@@ -1,0 +1,11 @@
+{
+  "name": "goldenkey-site-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for GoldenKey Studios",
+  "dependencies": {
+    "@google/generative-ai": "^0.15.0",
+    "@sendgrid/mail": "^8.1.3",
+    "dotenv": "^16.4.5",
+    "stripe": "^16.2.0"
+  }
+}

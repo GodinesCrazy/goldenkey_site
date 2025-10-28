@@ -1,0 +1,166 @@
+PROMPT ÚNICO PARA GEMINI CODE ASSISTANT (VS CODE)
+
+Eres Gemini Code Assistant ejecutándose en VS Code.
+Actúa como un ingeniero full-stack de entrega continua que trabaja en un sitio estático. Tu misión es dejar la web lista y coherente, con el servicio “Niche Finder GPT” operativo (modo gratis y modo Pro), sin borrar archivos existentes (especialmente voxtide y utilidades), manteniendo todo compatible con Netlify. Trabaja en commits pequeños y descriptivos. Si algo no aplica, sáltalo sin bloquearte.
+
+> Reemplaza los valores entre {{…}} por los tuyos antes de ejecutarlo.
+
+0) Contexto y restricciones
+- Dominio/preview: https://goldenkeystudios.netlify.app/
+- Publisher AdSense: ca-pub-2918417880001381
+- No borrar: cualquier archivo de utilidades o HTMLs de políticas previas (p. ej. voxtide).
+- Repositorio local: carpeta del proyecto actual (contiene el ZIP desplegable).
+- Framework: HTML/CSS/JS plano (sin build step). Preferir Netlify Forms y Netlify Functions (si hicieran falta) antes que servidores propios.
+- Objetivo UX: carga rápida, responsive, copy claro, CTAs visibles.
+
+1) Hoja de Ruta (ejecútala en este orden)
+
+1. Preparación del entorno
+   - Crea rama: feat/niche-finder-setup.
+   - Asegura archivos base en raíz: ads.txt (ya existe), robots.txt (Allow: /), sitemap.xml (si no existe, créalo).
+   - Inserta (si faltara) el script de AdSense en <head> de index.html, /pet-tracking/index.html, /pet-tracking/checklist_anti_fuga.html:
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2918417880001381" crossorigin="anonymous"></script>
+
+2. Correcciones de UI/estilos
+   - Asegura en pet-tracking/styles.css reglas anti-solapamiento (imágenes y botones “Ver precio”). Si faltan, añade:
+     .table-wrap{overflow-x:auto}
+     .table-wrap td{vertical-align:top}
+     .table-wrap img{max-width:100%;height:auto;display:block;margin:6px 0}
+     .table-wrap .btn{display:inline-block;white-space:nowrap;position:static;margin-top:6px}
+     @media (max-width:560px){
+       .table-wrap table, .table-wrap thead{display:block}
+       .table-wrap tr{display:block;border-bottom:1px solid #1f1f1f;margin-bottom:12px}
+       .table-wrap td, .table-wrap th{display:block;width:100%}
+       .table-wrap .btn{width:100%;text-align:center}
+     }
+
+3. Nueva sección: /niche-finder/
+   - Crea carpeta /niche-finder/ con:
+     - index.html (landing del servicio)
+     - styles.css (puede reusar estilos de pet-tracking o importarlos)
+     - pricing.html (planes y checkout)
+     - thanks.html (página de gracias/descarga)
+   - Landing (/niche-finder/index.html):
+     - H1: “Encuentra Nichos Rentables en minutos”
+     - Secciones: Cómo funciona (3 pasos), Qué entregamos (lista), Demo (capturas/placeholder), CTA a quiz/formulario.
+     - Inserta formulario (Netlify Forms) para modo Gratis:
+       <form name="niche-quiz" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/niche-finder/thanks.html">
+         <input type="hidden" name="form-name" value="niche-quiz">
+         <p style="display:none"><label>Don’t fill <input name="bot-field"></label></p>
+         <label>Sector deseado <input name="sector" required></label>
+         <label>País/idioma <input name="region" required></label>
+         <label>Presupuesto (USD) <input name="budget" required></label>
+         <label>Habilidades (marca lo que aplique)
+           <select name="skills" multiple>
+             <option>Escritura</option><option>Video</option><option>Programación</option><option>Diseño</option>
+           </select>
+         </label>
+         <label>Restricciones <textarea name="constraints"></textarea></label>
+         <button type="submit" class="btn primary">Obtener 1 nicho gratis</button>
+       </form>
+       <p class="tagline">Al enviar aceptas nuestra <a href="/privacy.html">Política de Privacidad</a>.</p>
+   - Precios (/niche-finder/pricing.html):
+     - Plan Pro (Informe 5–10 nichos + plan 30 días): {{PRECIO_PRO}} (ej. USD 29)
+     - Plan Premium (+ starter kit): {{PRECIO_PREMIUM}} (ej. USD 79)
+     - Botones de pago con Stripe Checkout Links (placeholders):
+       <a class="btn primary" href="{{STRIPE_LINK_PRO}}" rel="nofollow">Comprar Informe Pro</a>
+       <a class="btn" href="{{STRIPE_LINK_PREMIUM}}" rel="nofollow">Comprar Premium</a>
+   - Gracias (/niche-finder/thanks.html):
+     - Mensaje de confirmación (gratis: “recibirás 1 nicho por correo”).
+     - Si ?pro=1, muestra bloque con “tu informe estará listo en minutos, revisa tu correo”.
+
+4. Automatización (no-code)
+   - Objetivo: Al recibir un envío del formulario niche-quiz, llamar a OpenAI (o Gemini) y generar el informe.
+   - Prepara carpetas:
+     - /automations/README.md con instrucciones de conectar:
+       - Netlify Forms → Zapier/Make (trigger “New Form Submission”).
+       - Action 1: Llamar a OpenAI/Gemini con system prompt y los campos del formulario.
+       - Action 2: Generar HTML/Markdown → convertir a PDF (Zapier: HTML to PDF o Make: PDF module).
+       - Action 3: Enviar email al usuario con el PDF adjunto y copia al admin {{EMAIL_ADMIN}}.
+   - Crea archivo /automations/prompt_niche.txt con este prompt base (lee variables y devuelve salida en JSON + HTML):
+     SYSTEM: Eres un analista de crecimiento. A partir de los datos del usuario (sector, región, skills, presupuesto, restricciones), devuelve:
+     - top_5_nichos con score (0-100) y breve justificación
+     - para el top_1: ficha 1 página (buyer persona, pains, JTBD), 10 keywords semilla, mapa de contenidos (3 pilares + 5 clusters cada uno), calendario 30 días (títulos), monetización (ads, afiliados, producto), afiliados recomendados y rangos de comisión, riesgos/estacionalidad, checklist de próximos pasos.
+     - salida en JSON y además un bloque HTML elegante imprimible.
+     Debes priorizar nichos con alta monetización (afiliados y/o productos), competencia abordable y señales de tendencia.
+
+   - Crea /automations/email_templates/entrega_pro.md (y entrega_free.md) con placeholders {{nombre}}, {{enlace_pdf}}.
+
+5. Afiliados (placeholders reutilizables)
+   - Crea /data/affiliates.json con estructura:
+     {
+       "hosting": {"name": "Proveedor X", "url": "{{AF_HOSTING}}", "commission": "recurring 30%"},
+       "domain": {"name": "Registrar Y", "url": "{{AF_DOMAIN}}"},
+       "seo_tool": {"name": "SEO Tool Z", "url": "{{AF_SEO}}"},
+       "email": {"name": "Email Suite", "url": "{{AF_EMAIL}}"}
+     }
+   - En /niche-finder/index.html añade sección “Stack recomendado” que lea estos enlaces (o pon links estáticos con placeholders).
+
+6. Legal y navegación
+   - Asegura footer coherente en todas las páginas clave: Privacidad • Términos • Contacto (no borrar los HTML de voxtide u otros).
+   - Banner simple de cookies (localStorage) con enlace a privacy.html.
+
+7. SEO mínimo
+   - Añade <title> + <meta name="description"> adecuados en todas las nuevas páginas.
+   - Agrega link rel="canonical" en las nuevas páginas apuntando a su URL pública.
+   - Crea sitemap.xml con rutas nuevas y enlázalo en robots.txt.
+
+8. QA & pruebas
+   - Valida HTML (sin errores críticos), responsive ≤ 360px.
+   - Prueba Netlify Forms en local con un POST simulado (o en preview).
+   - Comprueba que NO se ha borrado ningún archivo de utilidades (p. ej. voxtide-*.html).
+
+9. Entrega
+   - Genera CHANGELOG_goldenkey.txt con todo lo modificado.
+   - Empaqueta ZIP goldenkey_site_ready_niche_finder.zip en la carpeta raíz del proyecto (sin node_modules).
+   - Commit y PR: feat: niche finder GPT + pricing + forms + seo + qa con lista de archivos tocados.
+
+2) Variables a usar (colócalas donde corresponda)
+- {{EMAIL_ADMIN}} = tu correo de recepción (p. ej. contacto@goldenkeystudios.netlify.app)
+- {{STRIPE_LINK_PRO}} = enlace de checkout Pro
+- {{STRIPE_LINK_PREMIUM}} = enlace de checkout Premium
+- {{AF_HOSTING}}, {{AF_DOMAIN}}, {{AF_SEO}}, {{AF_EMAIL}} = enlaces de afiliado
+- {{PRECIO_PRO}}, {{PRECIO_PREMIUM}} = precios visibles en pricing.html
+
+No subas claves de API al repo. En producción, usa Netlify ENV VARS:
+- OPENAI_API_KEY o GEMINI_API_KEY
+- SENDGRID_API_KEY (si prefieres enviar correos desde función)
+- STRIPE_SECRET (solo si usas Webhooks/Functions)
+
+3) Criterios de aceptación (lo que debe quedar funcionando)
+- /niche-finder/ visible desde el home (con un CTA).
+- Quiz/Formulario Netlify operativo → llega a thanks y genera evento para Zapier/Make.
+- pricing.html con botones a Stripe (placeholders válidos).
+- Entrega por email: plantilla creada, prompt de generación guardado, README con pasos de conexión.
+- UI responsive sin solapamientos; Lighthouse móvil ≥ 90 en Accesibilidad.
+- Legales accesibles y footer coherente en todas las páginas nuevas.
+- sitemap.xml actualizado y enlazado en robots.txt.
+- Ningún archivo de utilidades eliminado (p. ej. voxtide siguen presentes).
+
+4) Mensajes de commit sugeridos
+- chore: add sitemap.xml and robots update
+- feat(niche-finder): landing + quiz (netlify forms)
+- feat(niche-finder): pricing + stripe checkout links
+- feat(automation): prompts + email templates + readme
+- fix(ui): anti-overlap styles for tables/buttons
+- docs: changelog
+
+5) Texto de ayuda para el prompt del generador (copiar a /automations/prompt_niche.txt)
+Rol: analista de crecimiento con sesgo a la acción.
+Entrada: sector, región/idioma, habilidades, presupuesto, restricciones.
+Salida:
+- top_5_nichos [score, justificación breve]
+- ficha completa del top_1: buyer persona, pains, JTBD, 10 keywords semilla, 3 pilares x 5 clusters, calendario 30 días (títulos), monetización (ads/afiliados/producto con ejemplos), herramientas sugeridas (con enlaces), riesgos y mitigación, checklist de próximos pasos.
+- formatea en JSON y también en HTML imprimible (sección “Resumen ejecutivo” + “Plan 30 días” + “Stack sugerido”).
+Criterios:
+- Evita nichos saturados salvo que exista ángulo diferencial claro.
+- Prefiere monetización mixta (afiliados recurrentes + producto propio).
+- Score = 0.4*TAM + 0.25*Monetización + 0.2*Dificultad_inversa + 0.1*Tendencia + 0.05*Riesgo_inverso (reporta componentes).
+
+6) Despliegue en Netlify (instrucciones para README)
+- Crear sitio desde repo o Netlify Drop con el ZIP final.
+- Activar Forms (Netlify lo detecta por data-netlify="true").
+- Añadir Environment Variables: OPENAI_API_KEY/GEMINI_API_KEY, etc.
+- Conectar dominio cuando aplique.
+
+EJECUTA ahora todos los pasos, realizando cambios mínimos pero completos, sin borrar archivos existentes, y deja un ZIP final goldenkey_site_ready_niche_finder.zip en la raíz del proyecto con todo listo para subir. Si alguna parte no aplica, documenta el motivo en el CHANGELOG_goldenkey.txt y sigue.

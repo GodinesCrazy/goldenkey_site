@@ -1,0 +1,6 @@
+{
+  "hosting": {"name": "Proveedor X", "url": "{{AF_HOSTING}}", "commission": "recurring 30%"},
+  "domain": {"name": "Registrar Y", "url": "{{AF_DOMAIN}}", "commission": "5-10%"},
+  "seo_tool": {"name": "SEO Tool Z", "url": "{{AF_SEO}}", "commission": "recurring 40%"},
+  "email": {"name": "Email Suite", "url": "{{AF_EMAIL}}", "commission": "recurring 25%"}
+}

@@ -1,0 +1,20 @@
+[build]
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/niche-finder/thanks.html"
+  to = "/thanks.html"
+  status = 301
+
+[[redirects]]
+  from = "/niche-finder/pricing.html"
+  to = "/pricing.html"
+  status = 301
+
+[[redirects]]
+  from = "/niche-finder/index.html"
+  to = "/index.html"
+  status = 301

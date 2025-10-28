@@ -135,6 +135,10 @@ const i18n = {
     'contact.email': 'Email',
     'contact.message': 'Mensaje',
     'contact.send': 'Enviar'
+    'app.storeLink': 'Ver en tienda',
+    'app.repoLink': 'Repositorio',
+    'app.searchPlaceholder': 'Buscar apps...',
+    'app.iconAlt': 'Icono de {appName}'
   },
   en: {
     'nav.apps': 'Apps',
@@ -187,12 +191,24 @@ const i18n = {
     'contact.email': 'Email',
     'contact.message': 'Message',
     'contact.send': 'Send'
+    'app.storeLink': 'Store page',
+    'app.repoLink': 'Repository',
+    'app.searchPlaceholder': 'Search apps...',
+    'app.iconAlt': 'Icon for {appName}'
   }
 };
 
 // ======= Helpers =======
 const $ = (q, ctx=document) => ctx.querySelector(q);
 const $$ = (q, ctx=document) => Array.from(ctx.querySelectorAll(q));
+
+const getI18n = (key, replacements = {}) => {
+  let text = i18n[state.lang][key] || i18n['es'][key] || key;
+  for (const [placeholder, value] of Object.entries(replacements)) {
+    text = text.replace(`{${placeholder}}`, value);
+  }
+  return text;
+};
 
 function applyTheme(name) {
   document.documentElement.setAttribute('data-theme', name);
@@ -210,13 +226,16 @@ function translatePage(lang) {
   // Elements with data-i18n keys
   $$('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    const html = i18n[lang][key];
-    if (html) el.innerHTML = html;
+    const translation = getI18n(key);
+    // Use innerHTML only if translation contains HTML tags
+    if (translation.includes('<') && translation.includes('>')) {
+      el.innerHTML = translation;
+    } else {
+      el.textContent = translation;
+    }
   });
   // Inputs placeholders
-  $('#searchInput').placeholder = (lang === 'es') ? 'Buscar apps...' : 'Search apps...';
-  $('#filterSelect').querySelector('option[value="all"]').textContent = i18n[lang]['filters.all'];
-  $('#filterSelect').querySelector('option[value="game"]').textContent = i18n[lang]['filters.game'];
+  $('#searchInput').placeholder = getI18n('app.searchPlaceholder');
   // Re-render apps with language
   renderApps(filteredApps());
 }
@@ -232,30 +251,34 @@ burger.addEventListener('click', () => {
 
 // ======= Apps Rendering =======
 const platformTag = (p, lang) => {
-  const map = { android: 'Android', ios: 'iOS', web: 'Web', game: (lang==='es'?'Juego':'Game') };
+  const map = { android: 'Android', ios: 'iOS', web: 'Web', game: getI18n('filters.game') };
   return `<span class="tag">${map[p] || p}</span>`;
+};
+
+const getAppText = (app, field) => {
+    return app[field][state.lang] || app[field]['es'];
 };
 
 function renderApps(apps) {
   const grid = $('#appsGrid');
   grid.innerHTML = '';
-  const lang = state.lang;
   apps.forEach(app => {
     const el = document.createElement('article');
     el.className = 'card';
+    const appName = getAppText(app, 'nombre');
     el.innerHTML = `
       <div class="thumb">
-        <img src="assets/img/${app.id}.svg" alt="Icono ${app.nombre[lang] || app.nombre.es}" width="96" height="96"/>
+        <img src="assets/img/${app.id}.svg" alt="${getI18n('app.iconAlt', { appName })}" width="96" height="96"/>
       </div>
-      <h3>${app.nombre[lang] || app.nombre.es}</h3>
-      <p>${app.descripcion[lang] || app.descripcion.es}</p>
+      <h3>${appName}</h3>
+      <p>${getAppText(app, 'descripcion')}</p>
       <div class="tags">
-        ${app.plataformas.map(p => platformTag(p, lang)).join('')}
+        ${app.plataformas.map(p => platformTag(p, state.lang)).join('')}
         ${(app.tags||[]).map(t => `<span class=\"tag\">${t}</span>`).join('')}
       </div>
       <div class="actions">
-        ${app.links.play ? `<a class="btn ghost" href="${app.links.play}" target="_blank" rel="noopener">${lang==='es'?'Ver en tienda':'Store page'}</a>` : ''}
-        ${app.links.repo ? `<a class="btn ghost" href="${app.links.repo}" target="_blank" rel="noopener">${lang==='es'?'Repositorio':'Repository'}</a>` : ''}
+        ${app.links.play ? `<a class="btn ghost" href="${app.links.play}" target="_blank" rel="noopener">${getI18n('app.storeLink')}</a>` : ''}
+        ${app.links.repo ? `<a class="btn ghost" href="${app.links.repo}" target="_blank" rel="noopener">${getI18n('app.repoLink')}</a>` : ''}
       </div>
     `;
     grid.appendChild(el);
@@ -265,11 +288,10 @@ function renderApps(apps) {
 function filteredApps() {
   const term = $('#searchInput').value.toLowerCase().trim();
   const filter = $('#filterSelect').value;
-  const lang = state.lang;
   return state.apps.filter(a => {
     const bundle = [
-      a.nombre[lang] || a.nombre.es,
-      a.descripcion[lang] || a.descripcion.es,
+      getAppText(a, 'nombre'),
+      getAppText(a, 'descripcion'),
       ...(a.tags||[])
     ].join(' ').toLowerCase();
     const termMatch = bundle.includes(term);
@@ -292,6 +314,3 @@ $('#year').textContent = new Date().getFullYear();
 // ======= Init =======
 applyTheme(state.theme);
 applyLang(state.lang);
-renderApps(state.apps);
-applyFilters();
-

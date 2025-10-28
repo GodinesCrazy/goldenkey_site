@@ -1,0 +1,404 @@
+/* Estilos específicos para TeleMed Web */
+
+:root {
+  --telemed-primary: #2563eb;
+  --telemed-secondary: #10b981;
+  --telemed-danger: #ef4444;
+  --telemed-warning: #f59e0b;
+  --telemed-success: #22c55e;
+  --telemed-info: #06b6d4;
+}
+
+/* Layout de la aplicación */
+.telemed-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 80vh;
+}
+
+/* Header de la aplicación */
+.telemed-header {
+  background: linear-gradient(135deg, var(--telemed-primary), var(--telemed-secondary));
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.telemed-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.telemed-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Navegación de la aplicación */
+.telemed-nav {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 0 20px;
+  overflow-x: auto;
+}
+
+.telemed-nav button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.telemed-nav button:hover {
+  background: var(--telemed-primary);
+  color: white;
+}
+
+.telemed-nav button.active {
+  background: var(--telemed-primary);
+  color: white;
+}
+
+/* Cards de la aplicación */
+.telemed-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.telemed-card h3 {
+  color: var(--telemed-primary);
+  margin-bottom: 16px;
+}
+
+/* Grid de características */
+.telemed-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.feature-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--telemed-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+  color: white;
+}
+
+/* Formularios */
+.telemed-form {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+
+.telemed-form .form-group {
+  margin-bottom: 20px;
+}
+
+.telemed-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.telemed-form input,
+.telemed-form textarea,
+.telemed-form select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.telemed-form input:focus,
+.telemed-form textarea:focus,
+.telemed-form select:focus {
+  outline: none;
+  border-color: var(--telemed-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Botones */
+.telemed-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.telemed-btn.primary {
+  background: var(--telemed-primary);
+  color: white;
+}
+
+.telemed-btn.primary:hover {
+  background: #1d4ed8;
+}
+
+.telemed-btn.secondary {
+  background: var(--telemed-secondary);
+  color: white;
+}
+
+.telemed-btn.secondary:hover {
+  background: #059669;
+}
+
+.telemed-btn.danger {
+  background: var(--telemed-danger);
+  color: white;
+}
+
+.telemed-btn.danger:hover {
+  background: #dc2626;
+}
+
+/* Estados de la aplicación */
+.telemed-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.telemed-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--telemed-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Alertas y notificaciones */
+.telemed-alert {
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.telemed-alert.success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid var(--telemed-success);
+  color: #166534;
+}
+
+.telemed-alert.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--telemed-danger);
+  color: #991b1b;
+}
+
+.telemed-alert.info {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid var(--telemed-info);
+  color: #164e63;
+}
+
+/* Lista de citas/consultas */
+.telemed-appointments {
+  display: grid;
+  gap: 16px;
+}
+
+.appointment-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--telemed-primary);
+  border-radius: 8px;
+  padding: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+.appointment-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.appointment-time {
+  font-weight: 600;
+  color: var(--telemed-primary);
+}
+
+.appointment-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.appointment-status.scheduled {
+  background: rgba(245, 158, 11, 0.1);
+  color: #92400e;
+}
+
+.appointment-status.completed {
+  background: rgba(34, 197, 94, 0.1);
+  color: #166534;
+}
+
+.appointment-status.cancelled {
+  background: rgba(239, 68, 68, 0.1);
+  color: #991b1b;
+}
+
+/* Chat/Video call interface */
+.telemed-chat {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  border-radius: 12px 12px 0 0;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.chat-input {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .telemed-container {
+    padding: 10px;
+  }
+  
+  .telemed-header {
+    padding: 30px 15px;
+  }
+  
+  .telemed-header h1 {
+    font-size: 2rem;
+  }
+  
+  .telemed-nav {
+    padding: 0 10px;
+  }
+  
+  .telemed-features {
+    grid-template-columns: 1fr;
+  }
+  
+  .appointment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* Tema oscuro específico para TeleMed */
+@media (prefers-color-scheme: dark) {
+  .telemed-card {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .feature-card {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .telemed-form {
+    background: #1f2937;
+    border-color: #374151;
+  }
+}
+
+/* Animaciones */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}

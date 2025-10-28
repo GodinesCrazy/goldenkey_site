@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TeleMed — Telemedicina Inteligente | GoldenKey Studios</title>
+  <meta name="description" content="Plataforma de telemedicina con IA integrada. Consultas médicas virtuales, gestión de pacientes y prescripciones digitales."/>
+  <link rel="canonical" href="https://goldenkeystudios.netlify.app/telemed-web/index.html" />
+  <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="stylesheet" href="telemed-styles.css"/>
+  <link rel="stylesheet" href="telemed-medical-styles.css"/>
+  <link rel="icon" href="../assets/img/favicon.png" type="image/png">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+  
+  <!-- React -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+  <!-- Navegación integrada con GoldenKey -->
+  <div class="nav container">
+    <div class="brand">
+      <a href="../index.html" style="color: var(--text); display: flex; align-items: center; gap: 12px;">
+        <div class="brand-logo"></div> GoldenKey Studios
+      </a>
+    </div>
+    <div style="display:flex;gap:16px">
+      <a href="../index.html">Inicio</a>
+      <a href="../apps.html">Apps</a>
+      <a href="../pricing.html">Precios</a>
+    </div>
+  </div>
+
+  <!-- Aplicación TeleMed -->
+  <div id="telemed-app"></div>
+
+  <!-- Scripts de configuración y aplicación -->
+  <script type="text/babel" src="firebase-config.js"></script>
+  <script type="text/babel" src="telemed-app.js"></script>
+  
+  <!-- Footer integrado -->
+  <div class="footer container">
+    © 2025 GoldenKey Studios
+    · <a href="../terms.html">Términos</a> 
+    · <a href="../privacy.html">Privacidad</a> 
+    · <a href="../contacto.html">Contacto</a>
+  </div>
+
+</body>
+</html>

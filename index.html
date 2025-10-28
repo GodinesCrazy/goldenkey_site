@@ -1,213 +1,149 @@
-<!DOCTYPE html>
-<html lang="es" data-theme="onyx">
+<!doctype html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GoldenKey Studios - Desarrollo de Apps & Juegos</title>
-  <meta name="description" content="GoldenKey Studios: desarrollo de apps Android, juegos 2D y soluciones con IA. Sitio bilingüe ES/EN.">
-  <link rel="canonical" href="https://goldenkeystudios.netlify.app/" />
-  <meta property="og:title" content="GoldenKey Studios - Apps & Juegos" />
-  <meta property="og:description" content="Estudio especializado en apps, juegos y experiencias con IA." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/img/og-cover.png" />
-  <meta property="og:url" content="https://goldenkeystudios.netlify.app/" />
-  <meta property="og:locale" content="es_ES" />
-  <meta property="og:locale:alternate" content="en_US" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="GoldenKey Studios - Apps & Juegos" />
-  <meta name="twitter:description" content="Desarrollo de apps Android, juegos 2D y soluciones con IA." />
-  <meta name="twitter:image" content="assets/img/og-cover.png" />
-  <meta name="theme-color" content="#F6D365" />
-  <link rel="icon" href="assets/img/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <link rel="manifest" href="manifest.json">
-</head>
-<body>
-  <header class="nav">
-    <a class="brand" href="#inicio" aria-label="Inicio">
-      <img src="assets/img/logo.svg" alt="" width="28" height="28" />
-      <span id="brandName">GoldenKey Studios</span>
-    </a>
-    <nav class="nav-links" aria-label="Navegación principal">
-      <a href="#apps" id="navApps" data-i18n="nav.apps">Apps</a>
-      <a href="#servicios" id="navServices" data-i18n="nav.services">Servicios</a>
-      <a href="#sobre" id="navAbout" data-i18n="nav.about">Sobre nosotros</a>
-      <a href="#contacto" id="navContact" data-i18n="nav.contact">Contacto</a>
-    </nav>
-    <div class="nav-ctas">
-      <select id="themeSelect" class="select" aria-label="Cambiar tema">
-        <option value="onyx">Onyx Pro (Oscuro)</option>
-        <option value="aurora">Aurora Gradient</option>
-        <option value="glass">Glass Noir</option>
-        <option value="neo">NeoBrutalist Pop</option>
-        <option value="neon">Neon Matrix</option>
-      </select>
-      <select id="langSelect" class="select" aria-label="Cambiar idioma">
-        <option value="es">ES</option>
-        <option value="en">EN</option>
-      </select>
-      <a class="btn primary" href="#contacto" id="ctaTalk" data-i18n="cta.talk">Hablemos</a>
-      <button class="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <div id="mobileMenu" class="mobile-menu" hidden>
-      <a href="#apps" data-i18n="nav.apps">Apps</a>
-      <a href="#servicios" data-i18n="nav.services">Servicios</a>
-      <a href="#sobre" data-i18n="nav.about">Sobre nosotros</a>
-      <a href="#contacto" data-i18n="nav.contact">Contacto</a>
-    </div>
-  </header>
-
-  <main id="inicio" class="hero">
-    <div class="hero-content">
-      <p class="kicker" id="heroKicker" data-i18n="hero.kicker">Estudio de producto</p>
-      <h1 id="heroTitle" data-i18n="hero.title">Creamos <span class="accent">apps</span> y <span class="accent">juegos</span> que la gente ama.</h1>
-      <p class="lede" id="heroLede" data-i18n="hero.lede">Android nativo, juegos 2D y soluciones con IA. Performance real, monetización ética y diseño impecable.</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#apps" id="heroSeeProjects" data-i18n="hero.seeProjects">Ver proyectos</a>
-        <a class="btn ghost" href="assets/CV_GoldenKey_Studios.pdf" download id="heroDownloadCV" data-i18n="hero.downloadCV">Descargar dossier</a>
-      </div>
-      <div class="hero-stats" role="list">
-        <div class="stat" role="listitem"><strong id="statApps">10+</strong><span id="statAppsLabel" data-i18n="stats.apps">Apps publicadas</span></div>
-        <div class="stat" role="listitem"><strong id="statYears">7+</strong><span id="statYearsLabel" data-i18n="stats.years">Años creando</span></div>
-        <div class="stat" role="listitem"><strong id="statRating">4.7★</strong><span id="statRatingLabel" data-i18n="stats.rating">Valoración media</span></div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <img src="assets/img/hero-mock.svg" alt="Previsualización de apps destacadas" loading="lazy" decoding="async" />
-    </div>
-  </main>
-
-  <section id="apps" class="section">
-    <div class="section-header">
-      <h2 id="appsTitle" data-i18n="apps.title">Apps destacadas</h2>
-      <div class="filters">
-        <input id="searchInput" class="input" type="search" placeholder="Buscar apps..." aria-label="Buscar apps">
-        <select id="filterSelect" class="select" aria-label="Filtrar por plataforma">
-          <option value="all" data-i18n="filters.all">Todas</option>
-          <option value="android">Android</option>
-          <option value="ios">iOS</option>
-          <option value="web">Web</option>
-          <option value="game" data-i18n="filters.game">Juego</option>
-        </select>
-      </div>
-    </div>
-    <div id="appsGrid" class="grid"></div>
-  </section>
-
-  <section id="servicios" class="section">
-    <div class="section-header">
-      <h2 id="servicesTitle" data-i18n="services.title">Servicios</h2>
-    </div>
-    <div class="grid services">
-      <article class="card service">
-        <h3 data-i18n="services.android.title">Desarrollo Android</h3>
-        <p data-i18n="services.android.desc">Apps nativas (Java/Kotlin), arquitectura limpia (MVVM), APIs, AdMob y publicación en Google Play.</p>
-        <ul>
-          <li data-i18n="services.android.li1">Rendimiento y accesibilidad</li>
-          <li data-i18n="services.android.li2">Monetización ética</li>
-          <li data-i18n="services.android.li3">Automatización de builds y testing</li>
-        </ul>
-      </article>
-      <article class="card service">
-        <h3 data-i18n="services.games.title">Juegos 2D</h3>
-        <p data-i18n="services.games.desc">Match-3, plataformas y casual. Efectos, audio y arte coherente con la marca.</p>
-        <ul>
-          <li data-i18n="services.games.li1">Core loops y progresión</li>
-          <li data-i18n="services.games.li2">Analítica y LiveOps</li>
-          <li data-i18n="services.games.li3">Optimización de performance</li>
-        </ul>
-      </article>
-      <article class="card service">
-        <h3 data-i18n="services.web.title">Sitios & Landing</h3>
-        <p data-i18n="services.web.desc">Sitios ultra-rápidos y accesibles. SEO técnico, analítica y despliegue en Vercel/Netlify.</p>
-        <ul>
-          <li data-i18n="services.web.li1">Core Web Vitals</li>
-          <li data-i18n="services.web.li2">Diseño responsivo</li>
-          <li data-i18n="services.web.li3">Microinteracciones</li>
-        </ul>
-      </article>
-      <article class="card service">
-        <h3 data-i18n="services.ai.title">Integración de IA</h3>
-        <p data-i18n="services.ai.desc">Asistentes, automatizaciones y pipelines con OpenAI/Google, prompts y guardrails.</p>
-        <ul>
-          <li data-i18n="services.ai.li1">Evaluación y A/B</li>
-          <li data-i18n="services.ai.li2">Agentes multi-herramienta</li>
-          <li data-i18n="services.ai.li3">Seguridad y privacidad</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <section id="sobre" class="section">
-    <div class="about">
-      <div>
-        <h2 id="aboutTitle" data-i18n="about.title">Sobre nosotros</h2>
-        <p id="aboutBody" data-i18n="about.body">Somos <strong>GoldenKey Studios</strong>, un estudio en Chile. Diseñamos y construimos productos móviles y juegos con obsesión por el detalle: cargas mínimas, animaciones fluidas y UX clara. También nos encargamos de monetización y publicación.</p>
-        <ul class="badges">
-          <li>Android • Java/Kotlin</li>
-          <li>AdMob & Play Billing</li>
-          <li>Juegos 2D</li>
-          <li>Integración de IA</li>
-        </ul>
-        <div class="about-ctas">
-          <a class="btn primary" href="#contacto" id="aboutAvailability" data-i18n="about.availability">Disponibilidad</a>
-          <a class="btn ghost" href="mailto:goldenkeystudios0@gmail.com">goldenkeystudios0@gmail.com</a>
-        </div>
-      </div>
-      <aside class="aside-card">
-        <h3 data-i18n="about.recogTitle">Reconocimientos</h3>
-        <ul>
-          <li data-i18n="about.recog1">Apps destacadas en la comunidad</li>
-          <li data-i18n="about.recog2">Lanzamientos con 4.7★ promedio</li>
-          <li data-i18n="about.recog3">Crecimiento continuo de usuarios</li>
-        </ul>
-      </aside>
-    </div>
-  </section>
-
-  <section id="contacto" class="section">
-    <div class="section-header">
-      <h2 id="contactTitle" data-i18n="contact.title">Contacto</h2>
-      <p id="contactSubtitle" data-i18n="contact.subtitle">¿Tienes un proyecto en mente? Hablemos.</p>
-    </div>
-    <form class="contact" action="mailto:goldenkeystudios0@gmail.com" method="post" enctype="text/plain">
-      <label><span data-i18n="contact.name">Nombre</span> <input id="nameInput" type="text" name="nombre" required></label>
-      <label><span data-i18n="contact.email">Email</span> <input id="emailInput" type="email" name="email" required></label>
-      <label><span data-i18n="contact.message">Mensaje</span> <textarea id="messageInput" name="mensaje" rows="4" required></textarea></label>
-      <button class="btn primary" type="submit" id="contactSend" data-i18n="contact.send">Enviar</button>
-    </form>
-  </section>
-
-  <footer class="footer">
-    <div class="foot-left">
-      <img src="assets/img/favicon.svg" alt="" width="20" height="20" />
-      <span>&copy; <span id="year"></span> GoldenKey Studios</span>
-    </div>
-    <div class="foot-right">
-      <a href="#" aria-label="GitHub">GitHub</a>
-      <a href="#" aria-label="LinkedIn">LinkedIn</a>
-      <a href="#" aria-label="Google Play">Google Play</a>
-      <a href="#" aria-label="X / Twitter">X</a>
-      <a href="/voxtide-privacy.html" aria-label="Privacidad Voxtide">Privacidad</a>
-    </div>
-  </footer>
-
-  <script src="assets/js/app.js" defer></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Niche Finder GPT — Encuentra Nichos Rentables con IA</title>
+  <meta name="description" content="Servicio de análisis de nichos con IA. Obtén un informe gratuito con ideas de negocio, palabras clave y estrategias de monetización."/>
+  <link rel="canonical" href="https://goldenkeystudios.netlify.app/index.html" />
+  <link rel="stylesheet" href="assets/styles.css"/>
+  <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2918417880001381" crossorigin="anonymous"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "GoldenKey Studios",
-    "url": "https://goldenkeystudios.netlify.app/",
-    "email": "goldenkeystudios0@gmail.com",
-    "logo": "https://goldenkeystudios.netlify.app/assets/img/logo.svg"
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "#org",
+        "name": "GoldenKey Studios",
+        "url": "https://goldenkeystudios.netlify.app/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://goldenkeystudios.netlify.app/assets/img/favicon.png"
+        },
+        "contactPoint": [{
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "contacto@goldenkeystudios.netlify.app"
+        }]
+      },
+      {
+        "@type": "Service",
+        "name": "Niche Finder GPT",
+        "serviceType": "Market research / niche analysis",
+        "provider": { "@id": "#org" },
+        "areaServed": "Worldwide",
+        "termsOfService": "https://goldenkeystudios.netlify.app/terms.html",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Informe Pro",
+            "priceCurrency": "USD",
+            "price": "29.00",
+            "url": "https://goldenkeystudios.netlify.app/pricing.html",
+            "availability": "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            "name": "Premium Kit",
+            "priceCurrency": "USD",
+            "price": "79.00",
+            "url": "https://goldenkeystudios.netlify.app/pricing.html",
+            "availability": "https://schema.org/InStock"
+          }
+        ],
+        "potentialAction": {
+          "@type": "OrderAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://goldenkeystudios.netlify.app/pricing.html",
+            "actionPlatform": [
+              "https://schema.org/DesktopWebPlatform",
+              "https://schema.org/MobileWebPlatform"
+            ]
+          }
+        }
+      }
+    ]
   }
   </script>
+</head>
+<body>
+
+  <div class="nav container">
+    <div class="brand"><a href="index.html" style="color: var(--text); display: flex; align-items: center; gap: 12px;"><div class="brand-logo"></div> GoldenKey Studios</a></div>
+    <div style="display:flex;gap:16px">
+      <a href="apps.html">Apps</a>
+      <a href="pricing.html">Precios</a>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="hero" style="padding-top: 24px;">
+      <div>
+        <span class="badge">Servicio IA</span>
+        <h1>Encuentra Nichos Rentables en minutos</h1>
+        <p>Deja que nuestra IA analice miles de puntos de datos para descubrir oportunidades de negocio con baja competencia y alto potencial de monetización. Obtén tu primer informe de nicho gratis.</p>
+      </div>
+      <div>
+        <img src="assets/hero-showcase.png" alt="Ilustración de análisis de datos" class="responsive"/>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Cómo funciona</h2>
+      <div class="grid">
+        <div class="card"><h3>1. Describe tu idea</h3><p>Completa un breve formulario con tus intereses, habilidades y presupuesto.</p></div>
+        <div class="card"><h3>2. La IA analiza</h3><p>Nuestro sistema procesa tu información y la cruza con tendencias de mercado y datos de competencia.</p></div>
+        <div class="card"><h3>3. Recibe tu informe</h3><p>En minutos, obtienes un informe detallado en tu correo con un nicho validado y un plan de acción.</p></div>
+      </div>
+    </div>
+
+    <div class="section" id="informe-gratis">
+      <h2>Obtén tu primer informe de nicho, gratis</h2>
+      <div class="card">
+        <form name="niche-quiz" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thanks.html">
+          <input type="hidden" name="form-name" value="niche-quiz">
+          <p style="display:none"><label>Don’t fill <input name="bot-field"></label></p>
+          <div class="form-grid">
+            <label for="quiz-email">Tu correo <input id="quiz-email" type="email" name="email" required></label>
+            <label for="quiz-sector">Sector deseado (ej: fitness, mascotas) <input id="quiz-sector" name="sector" required></label>
+            <label for="quiz-region">País/idioma (ej: España/español) <input id="quiz-region" name="region" required></label>
+            <label for="quiz-budget">Presupuesto inicial (USD) <input id="quiz-budget" type="number" name="budget" required></label>
+          </div>
+          <label for="quiz-skills">Habilidades (marca las que apliquen)
+            <select id="quiz-skills" name="skills[]" multiple>
+              <option value="escritura">Escritura / SEO</option>
+              <option value="video">Edición de Video</option>
+              <option value="programacion">Programación</option>
+              <option value="diseno">Diseño Gráfico</option>
+            </select>
+          </label>
+          <label for="quiz-constraints">Restricciones o intereses específicos <textarea id="quiz-constraints" name="constraints" placeholder="Ej: no quiero vender productos físicos, prefiero temas de tecnología..."></textarea></label>
+          <button type="submit" class="btn primary" style="margin-top: 16px;">Obtener 1 nicho gratis</button>
+        </form>
+        <p class="tagline" style="font-size: 13px; margin-top: 12px;">Al enviar aceptas nuestra <a href="/privacy.html" target="_blank">Política de Privacidad</a>.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Stack recomendado</h2>
+      <p>Herramientas que usamos y recomendamos para lanzar tu proyecto de nicho.</p>
+      <div class="grid">
+        <div class="card"><p><strong>Hosting</strong><br>Proveedor X</p><a class="btn secondary" href="{{AF_HOSTING}}" rel="nofollow sponsored">Ver oferta</a></div>
+        <div class="card"><p><strong>Dominio</strong><br>Registrar Y</p><a class="btn secondary" href="{{AF_DOMAIN}}" rel="nofollow sponsored">Ver oferta</a></div>
+        <div class="card"><p><strong>Herramienta SEO</strong><br>SEO Tool Z</p><a class="btn secondary" href="{{AF_SEO}}" rel="nofollow sponsored">Ver oferta</a></div>
+      </div>
+      <p class="tagline" style="font-size: 13px; margin-top: 12px;">Estos enlaces son de afiliados. Tu precio no cambia y nos ayudas a mantener el servicio.</p>
+    </div>
+
+  </main>
+
+  <div class="footer container">
+    © 2025 GoldenKey Studios
+    · <a href="terms.html">Términos</a> · <a href="privacy.html">Privacidad</a> · <a href="contacto.html">Contacto</a>
+  </div>
+
 </body>
 </html>
-

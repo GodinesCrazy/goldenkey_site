@@ -1,0 +1,30 @@
+## 2025-10-13 - chore: cleanup + favicon + SEO
+
+- Set global site favicon to `assets/img/favicon.png` (new brand image).
+- Added `<link rel="icon">` and canonical tags across key pages.
+- Fixed sitemap URLs to match current paths (`/index.html`, `/pricing.html`, `/thanks.html`).
+- Updated `manifest.json` icons to include PNG.
+- Ensured pet-tracking pages use the global favicon and have canonicals.
+- Kept all policy pages (voxtide) intact.
+- Removed large unused root images to keep deploy light.
+- Added JSON‑LD (Organization + Service) to `index.html` for SEO.
+- Added Netlify redirects from old `/niche-finder/*` paths to new root pages (`/index.html`, `/pricing.html`, `/thanks.html`).
+
+## [FECHA_ACTUAL] - feat: Niche Finder GPT
+
+- **Nueva sección `/niche-finder/`**:
+  - Creado `index.html` con landing page, descripción del servicio y formulario Netlify para informe gratuito.
+  - Creado `pricing.html` con planes Pro/Premium y placeholders para enlaces de Stripe.
+  - Creado `thanks.html` como página de destino del formulario.
+  - Añadido `styles.css` específico para la nueva sección.
+- **Automatización**:
+  - Creada carpeta `/automations/` con `README.md` explicando la conexión Netlify -> Zapier/Make -> OpenAI.
+  - Añadido `prompt_niche.txt` con el prompt para la IA.
+  - Añadidas plantillas de email en `/automations/email_templates/`.
+- **Integración y SEO**:
+  - Añadido CTA a "Niche Finder" en `index.html`.
+  - Actualizado `sitemap.xml` con las nuevas URLs.
+  - Creado `/data/affiliates.json` para centralizar enlaces de afiliados.
+- **Verificaciones**:
+  - El script de AdSense y las reglas anti-solapamiento ya estaban presentes y correctos.
+  - No se ha eliminado ningún archivo de utilidad existente (ej. `voxtide-privacy.html`).

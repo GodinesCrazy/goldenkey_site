@@ -1,0 +1,55 @@
+<!-- Placeholder para imagen de TeleMed -->
+<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo gradient médico -->
+  <defs>
+    <linearGradient id="medGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="300" height="200" fill="url(#medGradient)" rx="12"/>
+  
+  <!-- Cruz médica -->
+  <g transform="translate(50, 40)">
+    <rect x="15" y="0" width="10" height="40" fill="white" opacity="0.9"/>
+    <rect x="0" y="15" width="40" height="10" fill="white" opacity="0.9"/>
+  </g>
+  
+  <!-- Iconos de tecnología -->
+  <g transform="translate(120, 30)" fill="white" opacity="0.8">
+    <!-- Smartphone -->
+    <rect x="0" y="0" width="25" height="40" rx="3" fill="none" stroke="white" stroke-width="2"/>
+    <circle cx="12.5" cy="35" r="2" fill="white"/>
+    
+    <!-- Laptop -->
+    <g transform="translate(40, 10)">
+      <rect x="0" y="0" width="35" height="20" rx="2" fill="none" stroke="white" stroke-width="2"/>
+      <line x1="0" y1="20" x2="35" y2="20" stroke="white" stroke-width="2"/>
+    </g>
+    
+    <!-- WiFi signal -->
+    <g transform="translate(90, 5)">
+      <path d="M0,15 Q7,8 14,15 M3,15 Q7,11 11,15 M6,15 Q7,14 8,15" 
+            fill="none" stroke="white" stroke-width="2"/>
+    </g>
+  </g>
+  
+  <!-- Título -->
+  <text x="150" y="130" text-anchor="middle" fill="white" font-size="24" font-weight="bold" font-family="Arial">
+    TeleMed
+  </text>
+  <text x="150" y="150" text-anchor="middle" fill="white" font-size="12" opacity="0.9" font-family="Arial">
+    Telemedicina Inteligente
+  </text>
+  
+  <!-- Elementos decorativos -->
+  <circle cx="230" cy="60" r="3" fill="white" opacity="0.6"/>
+  <circle cx="245" cy="45" r="2" fill="white" opacity="0.4"/>
+  <circle cx="260" cy="70" r="4" fill="white" opacity="0.3"/>
+  
+  <!-- Heartbeat line -->
+  <g transform="translate(20, 170)" stroke="white" stroke-width="2" fill="none" opacity="0.7">
+    <path d="M0,0 L20,0 L25,-10 L30,20 L35,-15 L40,10 L45,0 L260,0"/>
+  </g>
+</svg>
