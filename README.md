@@ -1,34 +1,54 @@
-# Automatización de Niche Finder GPT
+# TeleMed - Plataforma Médica Profesional
 
-Este servicio está automatizado usando **Netlify Functions**. El proceso es el siguiente:
-1.  Un usuario envía el formulario `niche-quiz`.
-2.  Netlify detecta el envío y dispara la función `submission-created.js`.
-3.  La función llama a la API de Google Gemini para generar el informe.
-4.  La función envía el informe al usuario por correo electrónico a través de SendGrid.
+¡Bienvenido a **TeleMed**! 🏥✨
 
-## Requisitos
+Una plataforma de telemedicina profesional con interfaz de grado hospitalario, desplegada automáticamente en GitHub Pages.
 
-- Una cuenta en Netlify con el sitio desplegado.
-- Una clave de API de Google Gemini.
-- Una clave de API de SendGrid y un remitente verificado.
+## 🌐 Enlaces Principales
 
-## Configuración de Variables de Entorno
+### 🎯 **DEMO EN VIVO:**
+- **Página Principal:** [TeleMed Demo](https://godinescrazy.github.io/goldenkey_site/telemed-demo.html)
 
-Para que la función se ejecute correctamente, debes configurar las siguientes variables de entorno en el panel de tu sitio en Netlify (`Site settings > Build & deploy > Environment`):
+### 🏥 **Sistema Completo:**
+- **Sistema Principal:** [TeleMed Web](https://godinescrazy.github.io/goldenkey_site/telemed-web/)
+- **Interfaz Hospitalaria:** [TeleMed Hospital](https://godinescrazy.github.io/goldenkey_site/telemed-hospitalario.html)
 
-- `GEMINI_API_KEY`: Tu clave de API de Google Gemini.
-- `SENDGRID_API_KEY`: Tu clave de API de SendGrid.
-- `EMAIL_ADMIN`: Tu correo electrónico, donde recibirás una copia de cada informe enviado.
-- `STRIPE_SECRET_KEY`: Tu clave secreta de Stripe (ej. `sk_test_...`).
-- `STRIPE_WEBHOOK_SECRET`: El secreto de tu endpoint de webhook de Stripe (ej. `whsec_...`).
-- `URL`: La URL principal de tu sitio (Netlify la establece automáticamente, ej. `https://goldenkeystudios.netlify.app`).
+### 📚 **Documentación:**
+- **Manual de Usuario:** [Manual Completo](https://godinescrazy.github.io/goldenkey_site/MANUAL_USUARIO.md)
+- **Política de Privacidad:** [Privacy Policy](https://godinescrazy.github.io/goldenkey_site/PRIVACY_POLICY.md)
 
-Una vez desplegado el sitio con estas variables configuradas, el flujo será 100% automático.
+## 🚀 Características Principales
 
-## Configuración del Webhook de Stripe
+- ✅ **Interfaz Profesional Médica** - Diseño hospitalario de grado profesional
+- ✅ **Videoconsultas HD** - WebRTC integrado con Firebase
+- ✅ **Chat Encriptado** - Comunicaciones seguras end-to-end
+- ✅ **Recetas Digitales** - Firmadas digitalmente con validación
+- ✅ **Historial Médico** - Almacenamiento seguro en Firebase Firestore
+- ✅ **Sistema de Pagos** - Integración con múltiples métodos de pago
+- ✅ **HIPAA Compliant** - Cumplimiento de normativas médicas internacionales
 
-1.  Ve a tu panel de Stripe > Desarrolladores > Webhooks.
-2.  Haz clic en "Añadir un endpoint".
-3.  En "URL del endpoint", introduce: `https://<tu-dominio>.netlify.app/.netlify/functions/stripe-webhook`.
-4.  En "Eventos para enviar", selecciona `checkout.session.completed`.
-5.  Copia el "Secreto de firma" del webhook y añádelo como la variable de entorno `STRIPE_WEBHOOK_SECRET` en Netlify.
+## 📱 Compatibilidad
+
+- **Móviles:** iOS 12+, Android 8+
+- **Navegadores:** Chrome 80+, Firefox 75+, Safari 13+, Edge 80+
+- **Tablets:** Optimizado para uso profesional médico
+
+## 🔧 Instalación y Despliegue
+
+### Despliegue Automático (GitHub Pages):
+Este repositorio se despliega automáticamente en GitHub Pages mediante GitHub Actions.
+
+### Para desarrollo local:
+```bash
+git clone https://github.com/GodinesCrazy/goldenkey_site.git
+cd goldenkey_site
+# Abrir telemed-demo.html en el navegador
+```
+
+## 🏗️ Arquitectura del Sistema
+
+- **Frontend:** HTML5, CSS3, JavaScript ES6+ con diseño responsive
+- **Backend:** Firebase Suite (Auth, Firestore, Storage, Functions)
+- **Videollamadas:** WebRTC nativo + Firebase Realtime Database
+- **Seguridad:** Encriptación AES-256 + autenticación multifactor
+- **CI/CD:** GitHub Actions para despliegue automático
