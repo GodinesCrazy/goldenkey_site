@@ -67,6 +67,50 @@
       -webkit-font-smoothing: antialiased;
     }
     
+    /* Navegación TeleMed Profesional */
+    .telemed-nav-pro {
+      background: linear-gradient(135deg, var(--medical-blue), var(--medical-green));
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .telemed-brand-pro {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .telemed-nav-links-pro {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .telemed-nav-links-pro a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    
+    .telemed-nav-links-pro a:hover {
+      color: white;
+    }
+    
+    @media (max-width: 768px) {
+      .telemed-nav-links-pro { display: none; }
+      .telemed-brand-pro { font-size: 14px; }
+    }
+    
     .medical-container {
       max-width: 420px;
       margin: 0 auto;
@@ -776,6 +820,21 @@
   </style>
 </head>
 <body>
+  <!-- Navegación TeleMed Profesional -->
+  <div class="telemed-nav-pro">
+    <div class="telemed-brand-pro">
+      <span>💼</span>
+      <span>TeleMed Pro</span>
+    </div>
+    <div class="telemed-nav-links-pro">
+      <a href="telemed-index.html">🏠 Inicio</a>
+      <a href="telemed-web/">💻 Sistema Principal</a>
+      <a href="telemed-hospitalario.html">🏨 Hospital</a>
+      <a href="telemed-mobile-style.html">📱 Móvil</a>
+      <a href="telemed-demo.html">🎯 Demo</a>
+    </div>
+  </div>
+  
   <div class="medical-container">
     <div id="telemed-app"></div>
   </div>

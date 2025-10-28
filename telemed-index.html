@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TeleMed - Plataforma de Telemedicina Profesional</title>
+  <meta name="description" content="Sistema completo de telemedicina profesional con interfaz hospitalaria, versiones móvil y web. Consultas seguras, gestión médica integral y cumplimiento HIPAA."/>
+  <link rel="canonical" href="https://godinescrazy.github.io/goldenkey_site/" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      padding: 60px 0 40px 0;
+    }
+    
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+    
+    .title {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .subtitle {
+      font-size: 1.25rem;
+      opacity: 0.95;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .quick-access {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .quick-title {
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .platform-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .platform-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border-color: #2563eb;
+    }
+    
+    .platform-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+    
+    .platform-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+    
+    .platform-desc {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+    
+    .platform-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .platform-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    
+    .main-access {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .main-btn {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 20px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .main-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+      color: #2563eb;
+      transform: scale(1.05);
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+    
+    .feature {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .footer {
+      background: rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+      padding: 30px;
+      border-radius: 12px;
+      margin-top: 40px;
+    }
+    
+    @media (max-width: 768px) {
+      .title {
+        font-size: 2rem;
+      }
+      .platforms-grid {
+        grid-template-columns: 1fr;
+      }
+      .container {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🏥⚕️</div>
+      <h1 class="title">TeleMed</h1>
+      <p class="subtitle">Plataforma Profesional de Telemedicina - Acceso a Todas las Versiones</p>
+    </div>
+    
+    <div class="quick-access">
+      <h2 class="quick-title">🚀 Selecciona tu Plataforma</h2>
+      
+      <div class="platforms-grid">
+        <div class="platform-card">
+          <div class="platform-icon">🏥</div>
+          <h3 class="platform-title">Sistema Principal</h3>
+          <p class="platform-desc">Plataforma completa integrada con funcionalidades completas de telemedicina</p>
+          <a href="telemed-web/" class="platform-btn">Acceder Sistema</a>
+        </div>
+        
+        <div class="platform-card">
+          <div class="platform-icon">🏨</div>
+          <h3 class="platform-title">Versión Hospitalaria</h3>
+          <p class="platform-desc">Interfaz específica para hospitales con protocolos médicos profesionales</p>
+          <a href="telemed-hospitalario.html" class="platform-btn">Ver Hospital</a>
+        </div>
+        
+        <div class="platform-card">
+          <div class="platform-icon">📱</div>
+          <h3 class="platform-title">Versión Móvil</h3>
+          <p class="platform-desc">Optimizada para dispositivos móviles con navegación táctil</p>
+          <a href="telemed-mobile-style.html" class="platform-btn">Ver Móvil</a>
+        </div>
+        
+        <div class="platform-card">
+          <div class="platform-icon">💼</div>
+          <h3 class="platform-title">Versión Profesional</h3>
+          <p class="platform-desc">Plataforma avanzada para clínicas y centros médicos especializados</p>
+          <a href="telemed-professional.html" class="platform-btn">Ver Pro</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="main-access">
+      <a href="telemed-demo.html" class="main-btn">
+        🎯 Ver Página de Demo Completa
+      </a>
+    </div>
+    
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Seguro</div>
+        <p>Encriptación E2E y cumplimiento HIPAA</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Completo</div>
+        <p>Gestión integral de pacientes y consultas</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌐</div>
+        <div class="feature-title">Multiplataforma</div>
+        <p>Web, móvil y versiones especializadas</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Rápido</div>
+        <p>Carga instantánea y respuesta en tiempo real</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>© 2025 TeleMed - Sistema de Telemedicina Profesional</p>
+      <div style="margin-top: 15px;">
+        <a href="MANUAL_USUARIO.md" style="color: #60a5fa; margin: 0 15px; text-decoration: none;">📚 Manual</a>
+        <a href="PRIVACY_POLICY.md" style="color: #60a5fa; margin: 0 15px; text-decoration: none;">🔒 Privacidad</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -28,6 +28,51 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    /* Navegación TeleMed */
+    .telemed-nav {
+      background: linear-gradient(135deg, #1e40af, #059669);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .telemed-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .telemed-nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .telemed-nav-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    
+    .telemed-nav-links a:hover {
+      color: white;
+    }
+    
+    @media (max-width: 768px) {
+      .telemed-nav-links { display: none; }
+      .telemed-brand { font-size: 14px; }
+    }
       color: #2c3e50;
       line-height: 1.6;
       min-height: 100vh;
@@ -715,6 +760,21 @@
   </style>
 </head>
 <body>
+  <!-- Navegación TeleMed -->
+  <div class="telemed-nav">
+    <div class="telemed-brand">
+      <span>🏨</span>
+      <span>TeleMed Hospital</span>
+    </div>
+    <div class="telemed-nav-links">
+      <a href="telemed-index.html">🏠 Inicio</a>
+      <a href="telemed-web/">💻 Sistema Principal</a>
+      <a href="telemed-mobile-style.html">📱 Móvil</a>
+      <a href="telemed-professional.html">💼 Profesional</a>
+      <a href="telemed-demo.html">🎯 Demo</a>
+    </div>
+  </div>
+  
   <div class="medical-container">
     <div id="telemed-app"></div>
   </div>

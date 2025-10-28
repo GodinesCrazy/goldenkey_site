@@ -3,10 +3,9 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>TeleMed — Telemedicina Inteligente | GoldenKey Studios</title>
-  <meta name="description" content="Plataforma de telemedicina con IA integrada. Consultas médicas virtuales, gestión de pacientes y prescripciones digitales."/>
+  <title>TeleMed — Sistema de Telemedicina Profesional</title>
+  <meta name="description" content="Plataforma completa de telemedicina con IA integrada. Consultas médicas virtuales, gestión de pacientes y prescripciones digitales seguras."/>
   <link rel="canonical" href="https://godinescrazy.github.io/goldenkey_site/telemed-web/" />
-  <link rel="stylesheet" href="../assets/styles.css"/>
   <link rel="stylesheet" href="telemed-styles.css"/>
   <link rel="stylesheet" href="telemed-medical-styles.css"/>
   <link rel="icon" href="../assets/img/favicon.png" type="image/png">
@@ -21,20 +20,61 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    body { 
+      margin: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      background: #f8fafc;
+    }
+    .telemed-nav {
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+    .telemed-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .telemed-nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    .telemed-nav-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .telemed-nav-links a:hover {
+      color: white;
+    }
+    @media (max-width: 768px) {
+      .telemed-nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navegación integrada con GoldenKey -->
-  <div class="nav container">
-    <div class="brand">
-      <a href="../index.html" style="color: var(--text); display: flex; align-items: center; gap: 12px;">
-        <div class="brand-logo"></div> GoldenKey Studios
-      </a>
+  <!-- Navegación TeleMed -->
+  <div class="telemed-nav">
+    <div class="telemed-brand">
+      <span>🏥</span>
+      <span>TeleMed</span>
     </div>
-    <div style="display:flex;gap:16px">
-      <a href="../index.html">Inicio</a>
-      <a href="../apps.html">Apps</a>
-      <a href="../pricing.html">Precios</a>
+    <div class="telemed-nav-links">
+      <a href="../telemed-demo.html">🏠 Inicio</a>
+      <a href="../telemed-hospitalario.html">🏨 Hospital</a>
+      <a href="../telemed-mobile-style.html">📱 Móvil</a>
+      <a href="../telemed-professional.html">💼 Profesional</a>
+      <a href="../MANUAL_USUARIO.md">📚 Manual</a>
     </div>
   </div>
 
@@ -45,12 +85,14 @@
   <script type="text/babel" src="firebase-config.js"></script>
   <script type="text/babel" src="telemed-app.js"></script>
   
-  <!-- Footer integrado -->
-  <div class="footer container">
-    © 2025 GoldenKey Studios
-    · <a href="../terms.html">Términos</a> 
-    · <a href="../privacy.html">Privacidad</a> 
-    · <a href="../contacto.html">Contacto</a>
+  <!-- Footer TeleMed -->
+  <div style="background: #1e293b; color: #94a3b8; padding: 20px; text-align: center; margin-top: 40px;">
+    <p>© 2025 TeleMed - Plataforma de Telemedicina Profesional</p>
+    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 10px;">
+      <a href="../PRIVACY_POLICY.md" style="color: #60a5fa; text-decoration: none;">🔒 Privacidad</a>
+      <a href="../MANUAL_USUARIO.md" style="color: #60a5fa; text-decoration: none;">📚 Manual</a>
+      <a href="../telemed-demo.html" style="color: #60a5fa; text-decoration: none;">🏠 Inicio</a>
+    </div>
   </div>
 
 </body>
