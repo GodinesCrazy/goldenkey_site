@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TeleMed — Consultas en Línea</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  
+  <!-- React -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.4;
+    }
+    
+    .mobile-container {
+      max-width: 375px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    /* Header móvil */
+    .mobile-header {
+      background: white;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e9ecef;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .mobile-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    
+    .mobile-header p {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    /* Contenido principal */
+    .mobile-content {
+      padding: 0 0 80px 0;
+      min-height: calc(100vh - 140px);
+    }
+    
+    /* Tarjeta de usuario */
+    .user-card {
+      background: white;
+      padding: 20px;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .user-greeting {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    .user-service {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    /* Buscador */
+    .search-container {
+      padding: 20px;
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 40px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #f8f9fa;
+      position: relative;
+    }
+    
+    .search-container::before {
+      content: "🔍";
+      position: absolute;
+      left: 32px;
+      top: 32px;
+      font-size: 16px;
+    }
+    
+    /* Categorías */
+    .categories {
+      padding: 20px;
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .category-item {
+      text-align: center;
+      padding: 12px 8px;
+    }
+    
+    .category-icon {
+      width: 48px;
+      height: 48px;
+      background: #f0f8ff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      font-size: 24px;
+    }
+    
+    .category-name {
+      font-size: 12px;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    /* Tarjeta de consulta */
+    .consultation-card {
+      background: white;
+      margin: 0 20px 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    
+    .doctor-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .doctor-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .doctor-details h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    
+    .doctor-specialty {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .consultation-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .consultation-location {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .consultation-price {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .btn-primary {
+      width: 100%;
+      background: #4285f4;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    /* Dashboard de médico */
+    .dashboard-stats {
+      padding: 20px;
+      background: white;
+    }
+    
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .stat-icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    
+    .stat-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    /* Lista de pacientes */
+    .patients-section {
+      margin-top: 24px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 16px;
+    }
+    
+    .patient-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .patient-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .patient-info {
+      flex: 1;
+    }
+    
+    .patient-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 2px;
+    }
+    
+    .patient-complaint {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .patient-time {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    /* Navegación inferior */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 375px;
+      background: white;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      padding: 12px 0;
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.2s;
+    }
+    
+    .nav-item.active {
+      color: #4285f4;
+    }
+    
+    .nav-icon {
+      font-size: 20px;
+    }
+    
+    .nav-label {
+      font-size: 11px;
+      font-weight: 500;
+    }
+    
+    /* Formulario de registro */
+    .form-container {
+      padding: 40px 20px;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    
+    .form-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .form-logo {
+      width: 60px;
+      height: 60px;
+      background: #f0f0f0;
+      border-radius: 12px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .form-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #f8f9fa;
+    }
+    
+    .form-input::placeholder {
+      color: #999;
+    }
+    
+    .form-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 20px 0;
+    }
+    
+    .btn-register {
+      width: 100%;
+      background: #333;
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      margin-top: 16px;
+    }
+    
+    .form-footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .form-link {
+      color: #333;
+      text-decoration: underline;
+    }
+    
+    /* Chat de consulta */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 140px);
+    }
+    
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .message {
+      margin-bottom: 16px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .message.user {
+      flex-direction: row-reverse;
+    }
+    
+    .message-bubble {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    
+    .message.doctor .message-bubble {
+      background: #f0f0f0;
+      color: #333;
+    }
+    
+    .message.user .message-bubble {
+      background: #4285f4;
+      color: white;
+    }
+    
+    .message-time {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+    }
+    
+    .chat-input {
+      padding: 16px 20px;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .chat-text-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    
+    .chat-send-btn {
+      width: 32px;
+      height: 32px;
+      background: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Pantalla de receta */
+    .prescription-container {
+      padding: 20px;
+    }
+    
+    .prescription-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .prescription-content {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+      min-height: 200px;
+    }
+    
+    .prescription-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .btn-secondary {
+      width: 100%;
+      background: white;
+      color: #4285f4;
+      border: 1px solid #4285f4;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-container">
+    <div id="telemed-app"></div>
+  </div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function TeleMedApp() {
+      const [currentView, setCurrentView] = useState('home');
+      const [userType, setUserType] = useState('patient'); // 'patient' or 'doctor'
+
+      // Vista de paciente - Home
+      const PatientHome = () => (
+        <>
+          <div className="mobile-header">
+            <div className="user-greeting">Hola, María</div>
+            <h1>Consultas en Línea</h1>
+            <p>Servicio horas: Atención inmediata</p>
+          </div>
+          
+          <div className="mobile-content">
+            <div className="search-container">
+              <input className="search-input" placeholder="Buscar médico" />
+            </div>
+            
+            <div className="categories">
+              <div className="categories-grid">
+                <div className="category-item">
+                  <div className="category-icon">🧠</div>
+                  <div className="category-name">Psicología</div>
+                </div>
+                <div className="category-item">
+                  <div className="category-icon">👶</div>
+                  <div className="category-name">Pediatría</div>
+                </div>
+                <div className="category-item">
+                  <div className="category-icon">🩺</div>
+                  <div className="category-name">Dermatología</div>
+                </div>
+                <div className="category-item">
+                  <div className="category-icon">❤️</div>
+                  <div className="category-name">Cardio</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{padding: '0 20px'}}>
+              <h2 style={{fontSize: '18px', fontWeight: '600', marginBottom: '16px'}}>Consulta</h2>
+              <div className="consultation-card">
+                <div className="doctor-info">
+                  <div className="doctor-avatar">👨‍⚕️</div>
+                  <div className="doctor-details">
+                    <h3>Dr. Andrés Reyes</h3>
+                    <div className="doctor-specialty">Cardiólogo</div>
+                  </div>
+                </div>
+                <div className="consultation-meta">
+                  <div className="consultation-location">Cantaleja</div>
+                  <div className="consultation-price">CLP 15.000</div>
+                </div>
+                <button className="btn-primary" onClick={() => setCurrentView('chat')}>
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de médico - Dashboard
+      const DoctorDashboard = () => (
+        <>
+          <div className="mobile-header">
+            <h1>Mis Consultas</h1>
+          </div>
+          
+          <div className="mobile-content">
+            <div className="dashboard-stats">
+              <div className="stats-header">
+                <h2 style={{fontSize: '18px', fontWeight: '600'}}>Mis Consultas</h2>
+                <div style={{color: '#666', fontSize: '14px'}}>Admin</div>
+              </div>
+              
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <span className="stat-icon">⏰</span>
+                  <div className="stat-label">Servicio por horas</div>
+                </div>
+                <div className="stat-card">
+                  <span className="stat-icon">💰</span>
+                  <div className="stat-label">Ganancias de hoy: C$3.000</div>
+                </div>
+              </div>
+              
+              <div className="patients-section">
+                <div className="section-title">Consultas nuevas</div>
+                <div className="patient-item">
+                  <div className="patient-avatar">👩</div>
+                  <div className="patient-info">
+                    <div className="patient-name">María González</div>
+                    <div className="patient-complaint">Tengo dolor en el pecho</div>
+                  </div>
+                  <div className="patient-time">23:05</div>
+                </div>
+                
+                <div className="section-title" style={{marginTop: '24px'}}>Historial</div>
+                <div className="patient-item">
+                  <div className="patient-avatar">👨</div>
+                  <div className="patient-info">
+                    <div className="patient-name">Ignacio Silva</div>
+                  </div>
+                  <div className="patient-time">19 abr<br/>13 abr</div>
+                </div>
+                <div className="patient-item">
+                  <div className="patient-avatar">👩</div>
+                  <div className="patient-info">
+                    <div className="patient-name">Claudia Torres</div>
+                  </div>
+                  <div className="patient-time">19 abr</div>
+                </div>
+              </div>
+              
+              <button className="btn-primary" style={{marginTop: '24px'}}>
+                Atender
+              </button>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de registro
+      const RegisterView = () => (
+        <div className="form-container">
+          <div className="form-header">
+            <div className="form-logo">👤</div>
+            <h1 className="form-title">Registro</h1>
+          </div>
+          
+          <div className="form-group">
+            <input className="form-input" type="email" placeholder="EMAIL" />
+          </div>
+          
+          <div className="form-group">
+            <input className="form-input" type="password" placeholder="CONTRASEÑA" />
+          </div>
+          
+          <div className="form-checkbox">
+            <input type="checkbox" />
+            <span>Recordarme</span>
+          </div>
+          
+          <button className="btn-register">
+            REGISTRARSE
+          </button>
+          
+          <div className="form-footer">
+            <span>¿Ya tienes una cuenta? </span>
+            <a href="#" className="form-link" onClick={() => setCurrentView('home')}>Iniciar sesión</a>
+          </div>
+        </div>
+      );
+
+      // Vista de chat de consulta
+      const ChatView = () => (
+        <>
+          <div className="chat-header">
+            <button onClick={() => setCurrentView('home')} style={{background: 'none', border: 'none', fontSize: '18px'}}>←</button>
+            <div>
+              <div style={{fontWeight: '600'}}>Consulta</div>
+            </div>
+            <div style={{marginLeft: 'auto', display: 'flex', gap: '12px'}}>
+              <button style={{background: 'none', border: 'none', fontSize: '18px'}}>📹</button>
+              <button style={{background: 'none', border: 'none', fontSize: '18px'}}>ℹ️</button>
+            </div>
+          </div>
+          
+          <div className="chat-container">
+            <div className="chat-messages">
+              <div className="message user">
+                <div>
+                  <div className="message-bubble">Tengo dolor abdominal y molestias</div>
+                  <div className="message-time">12:00 PM</div>
+                </div>
+              </div>
+              
+              <div className="message doctor">
+                <div>
+                  <div className="message-bubble">¿Desde cuándo tiene estos síntomas?</div>
+                  <div className="message-time">Doctor</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{padding: '16px', display: 'flex', gap: '8px'}}>
+              <button style={{padding: '8px 16px', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}}>
+                Historial clínico
+              </button>
+              <button style={{padding: '8px 16px', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}}>
+                Emitir receta
+              </button>
+            </div>
+            
+            <button className="btn-primary" style={{margin: '0 16px 16px'}} onClick={() => setCurrentView('prescription')}>
+              Finalizar consulta
+            </button>
+            
+            <div className="chat-input">
+              <input className="chat-text-input" placeholder="Escribe un mensaje..." />
+              <button className="chat-send-btn">▶</button>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de prescripción
+      const PrescriptionView = () => (
+        <>
+          <div className="mobile-header">
+            <button onClick={() => setCurrentView('chat')} style={{background: 'none', border: 'none', fontSize: '18px', marginRight: '12px'}}>←</button>
+            <h1>Receta</h1>
+          </div>
+          
+          <div className="prescription-container">
+            <div style={{marginBottom: '20px'}}>
+              <h3 style={{marginBottom: '8px'}}>Medicamento</h3>
+              <input className="form-input" placeholder="Nombre del medicamento" />
+            </div>
+            
+            <div style={{marginBottom: '20px'}}>
+              <h3 style={{marginBottom: '8px'}}>Indicaciones</h3>
+              <textarea className="form-input" rows="3" placeholder="Instrucciones de uso"></textarea>
+            </div>
+            
+            <div style={{marginBottom: '20px'}}>
+              <h3 style={{marginBottom: '8px'}}>Duración</h3>
+              <input className="form-input" placeholder="Tiempo de tratamiento" />
+            </div>
+            
+            <button style={{
+              width: '100%', 
+              padding: '12px', 
+              background: '#f0f0f0', 
+              border: '1px solid #ccc', 
+              borderRadius: '8px',
+              marginBottom: '20px'
+            }}>
+              Añadir medicamento
+            </button>
+            
+            <p style={{fontSize: '12px', color: '#666', marginBottom: '24px', textAlign: 'center'}}>
+              La receta será firmada digitalmente
+            </p>
+            
+            <button className="btn-primary" onClick={() => setCurrentView('consultation-end')}>
+              Enviar receta
+            </button>
+          </div>
+        </>
+      );
+
+      // Vista final de consulta
+      const ConsultationEndView = () => (
+        <>
+          <div className="mobile-header">
+            <button onClick={() => setCurrentView('home')} style={{background: 'none', border: 'none', fontSize: '18px', marginRight: '12px'}}>←</button>
+            <h1>Consulta Finalizada</h1>
+          </div>
+          
+          <div className="prescription-container">
+            <div className="prescription-header">
+              <h2>Receta Electrónica</h2>
+            </div>
+            
+            <div className="prescription-content">
+              <div style={{color: '#666', fontSize: '14px', lineHeight: '1.6'}}>
+                <div>Paracetamol 500mg</div>
+                <div>Tomar 1 tableta cada 8 horas</div>
+                <div>Durante 7 días</div>
+                <br/>
+                <div>Ibuprofeno 400mg</div>
+                <div>Tomar 1 cápsula cada 12 horas si hay dolor</div>
+              </div>
+            </div>
+            
+            <div className="prescription-actions">
+              <button className="btn-primary">Descargar PDF</button>
+              <button className="btn-secondary">Enviar por correo</button>
+            </div>
+          </div>
+        </>
+      );
+
+      // Navegación inferior
+      const BottomNavigation = () => (
+        <div className="bottom-nav">
+          <button 
+            className={`nav-item ${currentView === 'home' ? 'active' : ''}`}
+            onClick={() => setCurrentView('home')}
+          >
+            <div className="nav-icon">🏠</div>
+            <div className="nav-label">Inicio</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'search' ? 'active' : ''}`}
+            onClick={() => setCurrentView('search')}
+          >
+            <div className="nav-icon">🔍</div>
+            <div className="nav-label">Buscar</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'calendar' ? 'active' : ''}`}
+            onClick={() => setCurrentView('calendar')}
+          >
+            <div className="nav-icon">📅</div>
+            <div className="nav-label">Citas</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'profile' ? 'active' : ''}`}
+            onClick={() => {
+              setUserType(userType === 'patient' ? 'doctor' : 'patient');
+              setCurrentView('home');
+            }}
+          >
+            <div className="nav-icon">👤</div>
+            <div className="nav-label">{userType === 'patient' ? 'Paciente' : 'Médico'}</div>
+          </button>
+        </div>
+      );
+
+      // Renderizado principal
+      const renderView = () => {
+        switch(currentView) {
+          case 'register':
+            return <RegisterView />;
+          case 'chat':
+            return <ChatView />;
+          case 'prescription':
+            return <PrescriptionView />;
+          case 'consultation-end':
+            return <ConsultationEndView />;
+          case 'home':
+          default:
+            return userType === 'patient' ? <PatientHome /> : <DoctorDashboard />;
+        }
+      };
+
+      return (
+        <>
+          {renderView()}
+          {currentView !== 'register' && currentView !== 'chat' && currentView !== 'prescription' && currentView !== 'consultation-end' && (
+            <BottomNavigation />
+          )}
+        </>
+      );
+    }
+
+    // Renderizar la aplicación
+    ReactDOM.render(<TeleMedApp />, document.getElementById('telemed-app'));
+  </script>
+
+  <!-- Configuración Firebase simplificada -->
+  <script type="text/babel">
+    const firebaseConfig = {
+      apiKey: "demo-project",
+      authDomain: "demo-project.firebaseapp.com", 
+      projectId: "demo-project",
+      storageBucket: "demo-project.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    
+    if (location.hostname === 'localhost') {
+      firebase.auth().useEmulator('http://localhost:9099');
+      firebase.firestore().useEmulator('localhost', 8080);
+    }
+
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+  </script>
+
+</body>
+</html>

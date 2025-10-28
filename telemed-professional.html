@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TeleMed Pro — Telemedicina Profesional</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  
+  <!-- React -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Font Awesome para iconos profesionales -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      /* Paleta Hospitalaria Profesional */
+      --medical-blue: #0066cc;
+      --medical-blue-dark: #004499;
+      --medical-blue-light: #e6f3ff;
+      --medical-green: #00a86b;
+      --medical-green-light: #e8f5f0;
+      --medical-red: #d32f2f;
+      --medical-orange: #ff8c00;
+      
+      /* Grises Médicos */
+      --white: #ffffff;
+      --gray-50: #fafbfc;
+      --gray-100: #f4f6f8;
+      --gray-200: #e4e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      
+      /* Sombras Médicas */
+      --shadow-sm: 0 2px 4px rgba(0,102,204,0.08);
+      --shadow-md: 0 4px 12px rgba(0,102,204,0.12);
+      --shadow-lg: 0 8px 24px rgba(0,102,204,0.15);
+      
+      /* Tipografía */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    body {
+      font-family: var(--font-family);
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .medical-container {
+      max-width: 420px;
+      margin: 0 auto;
+      background: var(--white);
+      min-height: 100vh;
+      box-shadow: 0 0 40px rgba(0,0,0,0.08);
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Header Profesional */
+    .medical-header {
+      background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-blue-dark) 100%);
+      padding: 24px 24px 32px;
+      color: var(--white);
+      position: relative;
+    }
+    
+    .medical-header::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-blue-dark) 100%);
+      border-radius: 0 0 24px 24px;
+    }
+    
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .medical-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--white);
+      color: var(--medical-blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .user-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+    
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--medical-green);
+      border-radius: 50%;
+    }
+    
+    .header-welcome {
+      font-size: 14px;
+      font-weight: 400;
+      opacity: 0.9;
+      margin-bottom: 4px;
+    }
+    
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+    
+    /* Contenido Principal */
+    .medical-content {
+      padding: 32px 0 100px;
+      min-height: calc(100vh - 200px);
+    }
+    
+    .section {
+      margin-bottom: 32px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 16px;
+      padding: 0 24px;
+    }
+    
+    /* Buscador Profesional */
+    .search-section {
+      padding: 0 24px;
+      margin-bottom: 32px;
+    }
+    
+    .search-container {
+      position: relative;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 16px 16px 16px 48px;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 400;
+      background: var(--white);
+      transition: all 0.2s ease;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--medical-blue);
+      box-shadow: 0 0 0 4px var(--medical-blue-light);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      font-size: 18px;
+    }
+    
+    /* Especialidades Médicas */
+    .specialties-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 0 24px;
+    }
+    
+    .specialty-card {
+      text-align: center;
+      padding: 16px 8px;
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .specialty-card:hover {
+      border-color: var(--medical-blue);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .specialty-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--medical-blue-light);
+      color: var(--medical-blue);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 20px;
+    }
+    
+    .specialty-name {
+      font-size: 12px;
+      color: var(--gray-700);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    
+    /* Tarjeta de Doctor Profesional */
+    .doctor-card {
+      background: var(--white);
+      margin: 0 24px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    
+    .doctor-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    
+    .doctor-header {
+      background: var(--gray-50);
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .doctor-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    .doctor-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--white) 100%);
+      border: 2px solid var(--medical-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--medical-blue);
+      font-weight: 600;
+    }
+    
+    .doctor-details {
+      flex: 1;
+    }
+    
+    .doctor-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+    
+    .doctor-specialty {
+      font-size: 14px;
+      color: var(--medical-blue);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    
+    .doctor-credentials {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    
+    .credential-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--medical-green-light);
+      color: var(--medical-green);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+    
+    .doctor-body {
+      padding: 20px;
+    }
+    
+    .doctor-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: var(--gray-50);
+      border-radius: 12px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+    
+    .consultation-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .consultation-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+    
+    .consultation-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--medical-blue);
+    }
+    
+    /* Botones Profesionales */
+    .btn {
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-family);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-blue-dark) 100%);
+      color: var(--white);
+      padding: 16px 24px;
+      font-size: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-secondary {
+      background: var(--white);
+      color: var(--medical-blue);
+      border: 2px solid var(--medical-blue);
+      padding: 14px 24px;
+      font-size: 16px;
+    }
+    
+    .btn-secondary:hover {
+      background: var(--medical-blue-light);
+    }
+    
+    .btn-full {
+      width: 100%;
+    }
+    
+    /* Dashboard de Médico Profesional */
+    .dashboard-stats {
+      padding: 0 24px;
+    }
+    
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    
+    .admin-badge {
+      background: var(--medical-orange);
+      color: var(--white);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .metric-card {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--medical-blue);
+    }
+    
+    .metric-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--medical-blue-light);
+      color: var(--medical-blue);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 18px;
+    }
+    
+    .metric-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+    
+    .metric-label {
+      font-size: 12px;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+    
+    .metric-change {
+      font-size: 11px;
+      color: var(--medical-green);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    
+    /* Lista de Pacientes Profesional */
+    .patients-list {
+      background: var(--white);
+      margin: 0 24px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+    }
+    
+    .list-header {
+      background: var(--gray-50);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+    
+    .patient-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      transition: all 0.2s ease;
+    }
+    
+    .patient-item:last-child {
+      border-bottom: none;
+    }
+    
+    .patient-item:hover {
+      background: var(--gray-50);
+    }
+    
+    .patient-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--white) 100%);
+      border: 2px solid var(--medical-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--medical-blue);
+      font-weight: 600;
+    }
+    
+    .patient-info {
+      flex: 1;
+    }
+    
+    .patient-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+    
+    .patient-complaint {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-bottom: 4px;
+    }
+    
+    .patient-priority {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+    
+    .priority-urgent {
+      background: #fee2e2;
+      color: var(--medical-red);
+    }
+    
+    .priority-normal {
+      background: var(--medical-green-light);
+      color: var(--medical-green);
+    }
+    
+    .patient-time {
+      text-align: right;
+    }
+    
+    .time-primary {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+    
+    .time-secondary {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    
+    /* Navegación Profesional */
+    .professional-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 420px;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+      display: flex;
+      padding: 8px 0;
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-400);
+      transition: all 0.2s ease;
+      padding: 12px 8px;
+    }
+    
+    .nav-item.active {
+      color: var(--medical-blue);
+    }
+    
+    .nav-item:hover {
+      color: var(--medical-blue);
+      background: var(--medical-blue-light);
+      border-radius: 12px;
+    }
+    
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    
+    .nav-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Formularios Profesionales */
+    .form-section {
+      padding: 32px 24px;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    
+    .form-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .medical-logo-large {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-blue-dark) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--white);
+      font-size: 32px;
+    }
+    
+    .form-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+    
+    .form-subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: var(--font-family);
+      transition: all 0.2s ease;
+      background: var(--white);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--medical-blue);
+      box-shadow: 0 0 0 4px var(--medical-blue-light);
+    }
+    
+    .form-input::placeholder {
+      color: var(--gray-400);
+    }
+    
+    /* Estados y notificaciones */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .status-online {
+      background: var(--medical-green-light);
+      color: var(--medical-green);
+    }
+    
+    .status-busy {
+      background: #fee2e2;
+      color: var(--medical-red);
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      .medical-container {
+        max-width: 100%;
+      }
+      
+      .specialties-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="medical-container">
+    <div id="telemed-app"></div>
+  </div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function TeleMedPro() {
+      const [currentView, setCurrentView] = useState('home');
+      const [userType, setUserType] = useState('patient'); // 'patient' or 'doctor'
+
+      // Vista de paciente - Profesional
+      const PatientHomePro = () => (
+        <>
+          <div className="medical-header">
+            <div className="header-top">
+              <div className="medical-logo">
+                <div className="logo-icon">
+                  <i className="fas fa-stethoscope"></i>
+                </div>
+                <span>TeleMed Pro</span>
+              </div>
+              <div className="user-status">
+                <div className="status-dot"></div>
+                <span>Conectado</span>
+              </div>
+            </div>
+            <div className="header-welcome">Bienvenida de nuevo,</div>
+            <div className="header-title">Dra. María González</div>
+            <div className="header-subtitle">Sistema de Consultas Médicas • Atención Inmediata</div>
+          </div>
+          
+          <div className="medical-content">
+            <div className="search-section">
+              <div className="search-container">
+                <i className="fas fa-search search-icon"></i>
+                <input className="search-input" placeholder="Buscar especialista o síntoma" />
+              </div>
+            </div>
+            
+            <div className="section">
+              <div className="section-title">Especialidades Médicas</div>
+              <div className="specialties-grid">
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-brain"></i>
+                  </div>
+                  <div className="specialty-name">Neurología</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-heart"></i>
+                  </div>
+                  <div className="specialty-name">Cardiología</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-child"></i>
+                  </div>
+                  <div className="specialty-name">Pediatría</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-eye"></i>
+                  </div>
+                  <div className="specialty-name">Oftalmología</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-bone"></i>
+                  </div>
+                  <div className="specialty-name">Traumatología</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-female"></i>
+                  </div>
+                  <div className="specialty-name">Ginecología</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-lungs"></i>
+                  </div>
+                  <div className="specialty-name">Neumología</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i className="fas fa-user-md"></i>
+                  </div>
+                  <div className="specialty-name">Med. General</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="section">
+              <div className="section-title">Especialista Recomendado</div>
+              <div className="doctor-card">
+                <div className="doctor-header">
+                  <div className="doctor-info">
+                    <div className="doctor-avatar">
+                      DR
+                    </div>
+                    <div className="doctor-details">
+                      <div className="doctor-name">Dr. Andrés Reyes</div>
+                      <div className="doctor-specialty">Cardiólogo Interventista</div>
+                      <div className="doctor-credentials">
+                        <div className="credential-badge">
+                          <i className="fas fa-certificate"></i>
+                          <span>Colegio Médico #12458</span>
+                        </div>
+                        <div className="credential-badge">
+                          <i className="fas fa-star"></i>
+                          <span>4.9</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="doctor-body">
+                  <div className="doctor-stats">
+                    <div className="stat-item">
+                      <div className="stat-value">850+</div>
+                      <div className="stat-label">Consultas</div>
+                    </div>
+                    <div className="stat-item">
+                      <div className="stat-value">15 años</div>
+                      <div className="stat-label">Experiencia</div>
+                    </div>
+                    <div className="stat-item">
+                      <div className="stat-value">98%</div>
+                      <div className="stat-label">Satisfacción</div>
+                    </div>
+                  </div>
+                  
+                  <div className="consultation-meta">
+                    <div className="consultation-location">
+                      <i className="fas fa-map-marker-alt"></i>
+                      <span>Hospital Cantaleja</span>
+                    </div>
+                    <div className="consultation-price">$15.000 CLP</div>
+                  </div>
+                  
+                  <button className="btn btn-primary btn-full" onClick={() => setCurrentView('chat')}>
+                    <i className="fas fa-video"></i>
+                    <span>Iniciar Consulta</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de médico - Dashboard profesional
+      const DoctorDashboardPro = () => (
+        <>
+          <div className="medical-header">
+            <div className="header-top">
+              <div className="medical-logo">
+                <div className="logo-icon">
+                  <i className="fas fa-stethoscope"></i>
+                </div>
+                <span>TeleMed Pro</span>
+              </div>
+              <div className="admin-badge">Panel Médico</div>
+            </div>
+            <div className="header-welcome">Panel de Control</div>
+            <div className="header-title">Dr. Andrés Reyes</div>
+            <div className="header-subtitle">Cardiología • Turno Activo hasta 18:00</div>
+          </div>
+          
+          <div className="medical-content">
+            <div className="dashboard-stats">
+              <div className="metrics-grid">
+                <div className="metric-card">
+                  <div className="metric-icon">
+                    <i className="fas fa-clock"></i>
+                  </div>
+                  <div className="metric-value">8</div>
+                  <div className="metric-label">Consultas Hoy</div>
+                  <div className="metric-change">+2 vs ayer</div>
+                </div>
+                
+                <div className="metric-card">
+                  <div className="metric-icon">
+                    <i className="fas fa-dollar-sign"></i>
+                  </div>
+                  <div className="metric-value">$120k</div>
+                  <div className="metric-label">Ingresos Mes</div>
+                  <div className="metric-change">+15% vs mes anterior</div>
+                </div>
+                
+                <div className="metric-card">
+                  <div className="metric-icon">
+                    <i className="fas fa-users"></i>
+                  </div>
+                  <div className="metric-value">24</div>
+                  <div className="metric-label">Pacientes Activos</div>
+                  <div className="metric-change">Esta semana</div>
+                </div>
+                
+                <div className="metric-card">
+                  <div className="metric-icon">
+                    <i className="fas fa-star"></i>
+                  </div>
+                  <div className="metric-value">4.9</div>
+                  <div className="metric-label">Calificación</div>
+                  <div className="metric-change">156 reseñas</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="section">
+              <div className="patients-list">
+                <div className="list-header">
+                  <i className="fas fa-clock"></i>
+                  <span style={{marginLeft: '8px'}}>Consultas Pendientes</span>
+                </div>
+                
+                <div className="patient-item">
+                  <div className="patient-avatar">MG</div>
+                  <div className="patient-info">
+                    <div className="patient-name">María González Pérez</div>
+                    <div className="patient-complaint">Dolor torácico, disnea de esfuerzo</div>
+                    <div className="patient-priority priority-urgent">Urgente</div>
+                  </div>
+                  <div className="patient-time">
+                    <div className="time-primary">Ahora</div>
+                    <div className="time-secondary">Sala 1</div>
+                  </div>
+                </div>
+                
+                <div className="patient-item">
+                  <div className="patient-avatar">JS</div>
+                  <div className="patient-info">
+                    <div className="patient-name">Juan Silva Morales</div>
+                    <div className="patient-complaint">Control post-operatorio</div>
+                    <div className="patient-priority priority-normal">Programada</div>
+                  </div>
+                  <div className="patient-time">
+                    <div className="time-primary">15:30</div>
+                    <div className="time-secondary">Sala 2</div>
+                  </div>
+                </div>
+                
+                <div className="patient-item">
+                  <div className="patient-avatar">CT</div>
+                  <div className="patient-info">
+                    <div className="patient-name">Claudia Torres López</div>
+                    <div className="patient-complaint">Seguimiento hipertensión arterial</div>
+                    <div className="patient-priority priority-normal">Control</div>
+                  </div>
+                  <div className="patient-time">
+                    <div className="time-primary">16:00</div>
+                    <div className="time-secondary">Sala 1</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{padding: '0 24px', marginTop: '24px'}}>
+              <button className="btn btn-primary btn-full" onClick={() => setCurrentView('chat')}>
+                <i className="fas fa-video"></i>
+                <span>Atender Próximo Paciente</span>
+              </button>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de registro profesional
+      const RegisterViewPro = () => (
+        <div className="form-section">
+          <div className="form-header">
+            <div className="medical-logo-large">
+              <i className="fas fa-stethoscope"></i>
+            </div>
+            <div className="form-title">Registro Médico</div>
+            <div className="form-subtitle">Acceso seguro al sistema profesional</div>
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Correo Electrónico</label>
+            <input className="form-input" type="email" placeholder="doctor@hospital.com" />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Contraseña</label>
+            <input className="form-input" type="password" placeholder="••••••••" />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Número de Colegiado</label>
+            <input className="form-input" type="text" placeholder="Ej: 12458" />
+          </div>
+          
+          <button className="btn btn-primary btn-full" style={{marginTop: '32px'}}>
+            <i className="fas fa-sign-in-alt"></i>
+            <span>Acceder al Sistema</span>
+          </button>
+          
+          <div style={{textAlign: 'center', marginTop: '24px', fontSize: '14px', color: 'var(--gray-500)'}}>
+            ¿Ya tienes cuenta? 
+            <a href="#" style={{color: 'var(--medical-blue)', fontWeight: '500', marginLeft: '4px'}} onClick={() => setCurrentView('home')}>
+              Iniciar sesión
+            </a>
+          </div>
+        </div>
+      );
+
+      // Navegación profesional
+      const ProfessionalNavigation = () => (
+        <div className="professional-nav">
+          <button 
+            className={`nav-item ${currentView === 'home' ? 'active' : ''}`}
+            onClick={() => setCurrentView('home')}
+          >
+            <div className="nav-icon">
+              <i className="fas fa-home"></i>
+            </div>
+            <div className="nav-label">Inicio</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'patients' ? 'active' : ''}`}
+            onClick={() => setCurrentView('patients')}
+          >
+            <div className="nav-icon">
+              <i className="fas fa-user-friends"></i>
+            </div>
+            <div className="nav-label">Pacientes</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'calendar' ? 'active' : ''}`}
+            onClick={() => setCurrentView('calendar')}
+          >
+            <div className="nav-icon">
+              <i className="fas fa-calendar-alt"></i>
+            </div>
+            <div className="nav-label">Agenda</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'reports' ? 'active' : ''}`}
+            onClick={() => setCurrentView('reports')}
+          >
+            <div className="nav-icon">
+              <i className="fas fa-chart-bar"></i>
+            </div>
+            <div className="nav-label">Reportes</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'profile' ? 'active' : ''}`}
+            onClick={() => {
+              setUserType(userType === 'patient' ? 'doctor' : 'patient');
+              setCurrentView('home');
+            }}
+          >
+            <div className="nav-icon">
+              <i className={`fas ${userType === 'patient' ? 'fa-user' : 'fa-user-md'}`}></i>
+            </div>
+            <div className="nav-label">{userType === 'patient' ? 'Paciente' : 'Doctor'}</div>
+          </button>
+        </div>
+      );
+
+      // Chat profesional (simplificado para demo)
+      const ChatViewPro = () => (
+        <>
+          <div className="medical-header">
+            <div className="header-top">
+              <button onClick={() => setCurrentView('home')} style={{background: 'none', border: 'none', color: 'white', fontSize: '20px', cursor: 'pointer'}}>
+                <i className="fas fa-arrow-left"></i>
+              </button>
+              <div className="medical-logo">
+                <div className="logo-icon">
+                  <i className="fas fa-video"></i>
+                </div>
+                <span>Consulta en Vivo</span>
+              </div>
+              <div style={{display: 'flex', gap: '12px'}}>
+                <button style={{background: 'none', border: 'none', color: 'white', fontSize: '18px', cursor: 'pointer'}}>
+                  <i className="fas fa-microphone"></i>
+                </button>
+                <button style={{background: 'none', border: 'none', color: 'white', fontSize: '18px', cursor: 'pointer'}}>
+                  <i className="fas fa-video"></i>
+                </button>
+              </div>
+            </div>
+            <div className="header-welcome">Paciente: María González</div>
+            <div className="header-title">Consulta Cardiológica</div>
+            <div className="header-subtitle">Duración: 15:23 min • Estado: Activa</div>
+          </div>
+          
+          <div className="medical-content">
+            <div style={{padding: '24px', textAlign: 'center', background: 'var(--gray-50)', margin: '0 24px', borderRadius: '16px'}}>
+              <div style={{fontSize: '48px', color: 'var(--medical-blue)', marginBottom: '16px'}}>
+                <i className="fas fa-video"></i>
+              </div>
+              <div style={{fontSize: '18px', fontWeight: '600', color: 'var(--gray-900)', marginBottom: '8px'}}>
+                Videollamada Activa
+              </div>
+              <div style={{fontSize: '14px', color: 'var(--gray-500)'}}>
+                La consulta está siendo grabada para fines médicos
+              </div>
+            </div>
+            
+            <div style={{padding: '0 24px', marginTop: '32px'}}>
+              <button className="btn btn-primary btn-full" onClick={() => setCurrentView('prescription')}>
+                <i className="fas fa-prescription-bottle-alt"></i>
+                <span>Emitir Prescripción</span>
+              </button>
+              
+              <button className="btn btn-secondary btn-full" style={{marginTop: '12px'}} onClick={() => setCurrentView('consultation-end')}>
+                <i className="fas fa-check-circle"></i>
+                <span>Finalizar Consulta</span>
+              </button>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de prescripción profesional
+      const PrescriptionViewPro = () => (
+        <>
+          <div className="medical-header">
+            <div className="header-top">
+              <button onClick={() => setCurrentView('chat')} style={{background: 'none', border: 'none', color: 'white', fontSize: '20px', cursor: 'pointer'}}>
+                <i className="fas fa-arrow-left"></i>
+              </button>
+              <div className="medical-logo">
+                <div className="logo-icon">
+                  <i className="fas fa-prescription-bottle-alt"></i>
+                </div>
+                <span>Prescripción Médica</span>
+              </div>
+            </div>
+            <div className="header-welcome">Paciente: María González</div>
+            <div className="header-title">Receta Digital</div>
+            <div className="header-subtitle">Sistema de prescripción electrónica certificada</div>
+          </div>
+          
+          <div className="medical-content">
+            <div style={{padding: '0 24px'}}>
+              <div className="form-group">
+                <label className="form-label">Medicamento Principal</label>
+                <input className="form-input" placeholder="Ej: Atenolol 50mg" />
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">Posología</label>
+                <textarea className="form-input" rows="3" placeholder="Ej: 1 comprimido cada 12 horas por vía oral"></textarea>
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">Duración del Tratamiento</label>
+                <input className="form-input" placeholder="Ej: 30 días" />
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">Indicaciones Especiales</label>
+                <textarea className="form-input" rows="2" placeholder="Observaciones adicionales para el paciente"></textarea>
+              </div>
+              
+              <div style={{background: 'var(--medical-blue-light)', padding: '16px', borderRadius: '12px', marginBottom: '24px'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--medical-blue)', fontWeight: '500', fontSize: '14px'}}>
+                  <i className="fas fa-info-circle"></i>
+                  <span>Firma Digital Automática</span>
+                </div>
+                <div style={{fontSize: '12px', color: 'var(--gray-600)', marginTop: '4px'}}>
+                  La receta será firmada digitalmente con tu certificado médico
+                </div>
+              </div>
+              
+              <button className="btn btn-primary btn-full" onClick={() => setCurrentView('consultation-end')}>
+                <i className="fas fa-signature"></i>
+                <span>Generar Prescripción</span>
+              </button>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista final de consulta profesional
+      const ConsultationEndViewPro = () => (
+        <>
+          <div className="medical-header">
+            <div className="header-top">
+              <button onClick={() => setCurrentView('home')} style={{background: 'none', border: 'none', color: 'white', fontSize: '20px', cursor: 'pointer'}}>
+                <i className="fas fa-home"></i>
+              </button>
+              <div className="medical-logo">
+                <div className="logo-icon">
+                  <i className="fas fa-check-circle"></i>
+                </div>
+                <span>Consulta Finalizada</span>
+              </div>
+            </div>
+            <div className="header-welcome">Resumen de la consulta</div>
+            <div className="header-title">María González</div>
+            <div className="header-subtitle">Consulta completada exitosamente</div>
+          </div>
+          
+          <div className="medical-content">
+            <div style={{padding: '0 24px'}}>
+              <div style={{background: 'var(--white)', border: '1px solid var(--gray-200)', borderRadius: '16px', padding: '24px', marginBottom: '24px'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px'}}>
+                  <i className="fas fa-file-medical" style={{color: 'var(--medical-blue)', fontSize: '24px'}}></i>
+                  <div>
+                    <div style={{fontWeight: '600', fontSize: '16px'}}>Receta Electrónica #1357</div>
+                    <div style={{fontSize: '12px', color: 'var(--gray-500)'}}>Generada el 27 oct. 2024, 15:45</div>
+                  </div>
+                </div>
+                
+                <div style={{background: 'var(--gray-50)', padding: '16px', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6'}}>
+                  <strong>Atenolol 50mg</strong><br/>
+                  1 comprimido cada 12 horas<br/>
+                  Duración: 30 días<br/><br/>
+                  
+                  <strong>Atorvastatina 20mg</strong><br/>
+                  1 comprimido en la noche<br/>
+                  Duración: 60 días
+                </div>
+              </div>
+              
+              <div style={{display: 'grid', gap: '12px'}}>
+                <button className="btn btn-primary btn-full">
+                  <i className="fas fa-download"></i>
+                  <span>Descargar PDF</span>
+                </button>
+                
+                <button className="btn btn-secondary btn-full">
+                  <i className="fas fa-envelope"></i>
+                  <span>Enviar por Email</span>
+                </button>
+                
+                <button className="btn btn-secondary btn-full">
+                  <i className="fas fa-share-alt"></i>
+                  <span>Compartir con Farmacia</span>
+                </button>
+              </div>
+              
+              <div style={{textAlign: 'center', marginTop: '32px', padding: '20px', background: 'var(--medical-green-light)', borderRadius: '12px'}}>
+                <i className="fas fa-check-circle" style={{color: 'var(--medical-green)', fontSize: '32px', marginBottom: '8px'}}></i>
+                <div style={{fontWeight: '600', color: 'var(--medical-green)', marginBottom: '4px'}}>
+                  Consulta Registrada
+                </div>
+                <div style={{fontSize: '12px', color: 'var(--gray-600)'}}>
+                  Historial actualizado automáticamente
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+      // Renderizado principal
+      const renderView = () => {
+        switch(currentView) {
+          case 'register':
+            return <RegisterViewPro />;
+          case 'chat':
+            return <ChatViewPro />;
+          case 'prescription':
+            return <PrescriptionViewPro />;
+          case 'consultation-end':
+            return <ConsultationEndViewPro />;
+          case 'home':
+          default:
+            return userType === 'patient' ? <PatientHomePro /> : <DoctorDashboardPro />;
+        }
+      };
+
+      return (
+        <>
+          {renderView()}
+          {currentView !== 'register' && currentView !== 'chat' && currentView !== 'prescription' && currentView !== 'consultation-end' && (
+            <ProfessionalNavigation />
+          )}
+        </>
+      );
+    }
+
+    // Renderizar la aplicación
+    ReactDOM.render(<TeleMedPro />, document.getElementById('telemed-app'));
+  </script>
+
+  <!-- Configuración Firebase -->
+  <script type="text/babel">
+    const firebaseConfig = {
+      apiKey: "demo-project",
+      authDomain: "demo-project.firebaseapp.com", 
+      projectId: "demo-project",
+      storageBucket: "demo-project.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    
+    if (location.hostname === 'localhost') {
+      firebase.auth().useEmulator('http://localhost:9099');
+      firebase.firestore().useEmulator('localhost', 8080);
+    }
+
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+  </script>
+
+</body>
+</html>

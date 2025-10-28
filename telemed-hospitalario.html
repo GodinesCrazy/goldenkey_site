@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TeleMed — Sistema de Telemedicina Profesional</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  
+  <!-- React -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #2c3e50;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    .medical-container {
+      max-width: 414px;
+      margin: 0 auto;
+      background: #ffffff;
+      min-height: 100vh;
+      box-shadow: 0 0 30px rgba(0,0,0,0.15);
+      position: relative;
+      border-radius: 0;
+    }
+    
+    /* Header médico profesional */
+    .medical-header {
+      background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+      color: white;
+      padding: 20px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(44, 62, 80, 0.3);
+    }
+    
+    .medical-header .status-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 12px;
+      opacity: 0.9;
+    }
+    
+    .medical-header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    
+    .medical-header .subtitle {
+      font-size: 15px;
+      opacity: 0.85;
+      font-weight: 400;
+    }
+    
+    /* Contenido principal */
+    .medical-content {
+      padding: 0 0 90px 0;
+      min-height: calc(100vh - 160px);
+      background: #fafbfc;
+    }
+    
+    /* Tarjeta de estado del usuario */
+    .user-status-card {
+      background: white;
+      margin: 16px;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 4px solid #3498db;
+    }
+    
+    .user-greeting {
+      font-size: 17px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+    
+    .user-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .user-details {
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+    
+    .online-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #27ae60;
+      font-weight: 500;
+      font-size: 13px;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #27ae60;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    
+    /* Barra de búsqueda profesional */
+    .search-section {
+      padding: 16px;
+    }
+    
+    .search-container {
+      position: relative;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      border: 2px solid #ecf0f1;
+      border-radius: 10px;
+      font-size: 16px;
+      background: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7f8c8d;
+      width: 20px;
+      height: 20px;
+    }
+    
+    /* Especialidades médicas */
+    .specialties-section {
+      padding: 0 16px 16px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+    
+    .specialties-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    
+    .specialty-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px 8px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .specialty-card:hover {
+      border-color: #3498db;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    
+    .specialty-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      color: white;
+      font-size: 20px;
+    }
+    
+    .specialty-name {
+      font-size: 12px;
+      color: #2c3e50;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    
+    /* Tarjetas de médicos */
+    .doctors-section {
+      padding: 0 16px;
+    }
+    
+    .doctor-card {
+      background: white;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border: 1px solid #ecf0f1;
+      transition: all 0.3s ease;
+    }
+    
+    .doctor-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    
+    .doctor-content {
+      padding: 20px;
+    }
+    
+    .doctor-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .doctor-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      border: 3px solid #ecf0f1;
+    }
+    
+    .doctor-info h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 4px;
+    }
+    
+    .doctor-specialty {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 4px;
+    }
+    
+    .doctor-credentials {
+      font-size: 12px;
+      color: #95a5a6;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .verified-badge {
+      background: #27ae60;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    
+    .doctor-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 1px solid #ecf0f1;
+      border-bottom: 1px solid #ecf0f1;
+      margin: 16px 0;
+    }
+    
+    .consultation-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .availability {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #27ae60;
+      font-weight: 500;
+    }
+    
+    .price-info {
+      text-align: right;
+    }
+    
+    .price {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .price-label {
+      font-size: 12px;
+      color: #7f8c8d;
+    }
+    
+    /* Botones profesionales */
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: #3498db;
+      border: 2px solid #3498db;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: #3498db;
+      color: white;
+    }
+    
+    /* Dashboard de médico profesional */
+    .dashboard-container {
+      padding: 16px;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .admin-badge {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-left: 4px solid #3498db;
+    }
+    
+    .stat-card.earnings {
+      border-left-color: #27ae60;
+    }
+    
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    /* Lista de consultas */
+    .consultations-section {
+      background: white;
+      margin-top: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    
+    .consultations-header {
+      padding: 16px 20px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #ecf0f1;
+      font-weight: 600;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+    }
+    
+    .consultation-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #ecf0f1;
+      transition: background 0.2s ease;
+    }
+    
+    .consultation-item:hover {
+      background: #f8f9fa;
+    }
+    
+    .consultation-item:last-child {
+      border-bottom: none;
+    }
+    
+    .patient-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      margin-right: 12px;
+    }
+    
+    .consultation-details {
+      flex: 1;
+    }
+    
+    .patient-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 2px;
+    }
+    
+    .consultation-complaint {
+      font-size: 13px;
+      color: #7f8c8d;
+      line-height: 1.3;
+    }
+    
+    .consultation-time {
+      font-size: 12px;
+      color: #95a5a6;
+      text-align: right;
+    }
+    
+    /* Chat médico */
+    .chat-header {
+      background: white;
+      padding: 16px 20px;
+      border-bottom: 2px solid #ecf0f1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .back-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #7f8c8d;
+      cursor: pointer;
+      padding: 4px;
+    }
+    
+    .chat-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    .chat-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 12px;
+    }
+    
+    .action-button {
+      background: #ecf0f1;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .action-button:hover {
+      background: #3498db;
+      color: white;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+    
+    .message {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+    }
+    
+    .message.user {
+      flex-direction: row-reverse;
+    }
+    
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ecf0f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    
+    .message.user .message-avatar {
+      background: #3498db;
+      color: white;
+    }
+    
+    .message-content {
+      max-width: 75%;
+    }
+    
+    .message-bubble {
+      background: white;
+      padding: 12px 16px;
+      border-radius: 18px;
+      border: 1px solid #ecf0f1;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    
+    .message.user .message-bubble {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+    
+    .message-time {
+      font-size: 11px;
+      color: #95a5a6;
+      margin-top: 4px;
+      text-align: center;
+    }
+    
+    /* Herramientas médicas */
+    .medical-tools {
+      padding: 16px 20px;
+      background: #f8f9fa;
+      border-top: 1px solid #ecf0f1;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .tool-button {
+      background: white;
+      border: 1px solid #ecf0f1;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .tool-button:hover {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+    
+    /* Navegación inferior profesional */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 414px;
+      background: white;
+      border-top: 2px solid #ecf0f1;
+      display: flex;
+      padding: 8px 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #7f8c8d;
+      transition: color 0.2s;
+      padding: 8px 4px;
+    }
+    
+    .nav-item.active {
+      color: #3498db;
+    }
+    
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      stroke-width: 1.5;
+    }
+    
+    .nav-label {
+      font-size: 11px;
+      font-weight: 500;
+    }
+    
+    /* Responsive */
+    @media (max-width: 375px) {
+      .medical-container {
+        max-width: 100%;
+      }
+      
+      .specialties-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="medical-container">
+    <div id="telemed-app"></div>
+  </div>
+
+  <script>
+    // Simulamos feather icons con SVGs simples
+    window.feather = {
+      replace: function() {
+        const icons = {
+          'search': '🔍',
+          'brain': '🧠',
+          'baby': '👶',
+          'eye': '👁️',
+          'heart': '❤️',
+          'video': '📹',
+          'phone': '📞',
+          'more-vertical': '⋮',
+          'file-text': '📄',
+          'clipboard': '📋',
+          'pill': '💊',
+          'send': '▶️',
+          'arrow-left': '←',
+          'home': '🏠',
+          'calendar': '📅',
+          'user': '👤',
+          'clock': '⏰',
+          'dollar-sign': '💰',
+          'shield-check': '🛡️',
+          'users': '👥',
+          'plus': '➕',
+          'check-circle': '✅',
+          'alert-circle': '⚠️',
+          'star': '⭐'
+        };
+        
+        document.querySelectorAll('[data-feather]').forEach(el => {
+          const icon = el.getAttribute('data-feather');
+          if (icons[icon]) {
+            el.innerHTML = icons[icon];
+            el.style.display = 'flex';
+            el.style.alignItems = 'center';
+            el.style.justifyContent = 'center';
+          }
+        });
+      }
+    };
+  </script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function TeleMedApp() {
+      const [currentView, setCurrentView] = useState('home');
+      const [userType, setUserType] = useState('patient');
+
+      // Inicializar iconos
+      useEffect(() => {
+        if (typeof feather !== 'undefined') {
+          feather.replace();
+        }
+      }, [currentView]);
+
+      // Vista de paciente profesional
+      const PatientHome = () => (
+        <>
+          <div className="medical-header">
+            <div className="status-bar">
+              <span>8:41</span>
+              <span>●●●● ◯ 📶 🔋</span>
+            </div>
+            <h1>TeleMed</h1>
+            <div className="subtitle">Sistema de Telemedicina Profesional</div>
+          </div>
+          
+          <div className="medical-content">
+            <div className="user-status-card">
+              <div className="user-info">
+                <div>
+                  <div className="user-greeting">Hola, María González</div>
+                  <div className="user-details">Paciente ID: #MT-2025-001234</div>
+                </div>
+                <div className="online-indicator">
+                  <div className="status-dot"></div>
+                  <span>En línea</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="search-section">
+              <div className="search-container">
+                <i data-feather="search" className="search-icon"></i>
+                <input className="search-input" placeholder="Buscar médico o especialidad" />
+              </div>
+            </div>
+            
+            <div className="specialties-section">
+              <h2 className="section-title">Especialidades Médicas</h2>
+              <div className="specialties-grid">
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i data-feather="brain"></i>
+                  </div>
+                  <div className="specialty-name">Psicología Clínica</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i data-feather="baby"></i>
+                  </div>
+                  <div className="specialty-name">Pediatría General</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i data-feather="eye"></i>
+                  </div>
+                  <div className="specialty-name">Dermatología</div>
+                </div>
+                <div className="specialty-card">
+                  <div className="specialty-icon">
+                    <i data-feather="heart"></i>
+                  </div>
+                  <div className="specialty-name">Cardiología</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="doctors-section">
+              <h2 className="section-title">Médicos Disponibles</h2>
+              <div className="doctor-card">
+                <div className="doctor-content">
+                  <div className="doctor-header">
+                    <div className="doctor-avatar">DR</div>
+                    <div className="doctor-info">
+                      <h3>Dr. Andrés Reyes Morales</h3>
+                      <div className="doctor-specialty">Cardiólogo Intervencionista</div>
+                      <div className="doctor-credentials">
+                        <span>Colegio Médico #12,845</span>
+                        <span className="verified-badge">✓ Verificado</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="doctor-meta">
+                    <div className="consultation-info">
+                      <div className="availability">
+                        <div className="status-dot"></div>
+                        <span>Disponible ahora</span>
+                      </div>
+                    </div>
+                    <div className="price-info">
+                      <div className="price">$25.000</div>
+                      <div className="price-label">CLP por consulta</div>
+                    </div>
+                  </div>
+                  
+                  <button className="btn-primary" onClick={() => setCurrentView('chat')}>
+                    <i data-feather="video" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                    Iniciar Consulta
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de médico profesional
+      const DoctorDashboard = () => (
+        <>
+          <div className="medical-header">
+            <div className="status-bar">
+              <span>8:41</span>
+              <span>●●●● ◯ 📶 🔋</span>
+            </div>
+            <h1>Panel Médico</h1>
+            <div className="subtitle">Sistema de Gestión de Consultas</div>
+          </div>
+          
+          <div className="medical-content">
+            <div className="dashboard-container">
+              <div className="dashboard-header">
+                <h2 className="section-title">Dashboard Profesional</h2>
+                <div className="admin-badge">
+                  <i data-feather="shield-check" style={{width: '14px', height: '14px'}}></i>
+                  <span>Médico Certificado</span>
+                </div>
+              </div>
+              
+              <div className="stats-container">
+                <div className="stat-card">
+                  <i data-feather="clock" className="stat-icon"></i>
+                  <div className="stat-label">Consultas Hoy</div>
+                  <div className="stat-value">12 pacientes</div>
+                </div>
+                <div className="stat-card earnings">
+                  <i data-feather="dollar-sign" className="stat-icon"></i>
+                  <div className="stat-label">Ingresos del Día</div>
+                  <div className="stat-value">$180.000</div>
+                </div>
+              </div>
+              
+              <div className="consultations-section">
+                <div className="consultations-header">
+                  <i data-feather="users" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                  Consultas Pendientes
+                </div>
+                
+                <div className="consultation-item">
+                  <div className="patient-avatar">MG</div>
+                  <div className="consultation-details">
+                    <div className="patient-name">María González Ruiz</div>
+                    <div className="consultation-complaint">Dolor torácico intermitente, disnea de esfuerzo</div>
+                  </div>
+                  <div className="consultation-time">
+                    <div>15:20</div>
+                    <div style={{color: '#e74c3c', fontWeight: '500'}}>Urgente</div>
+                  </div>
+                </div>
+                
+                <div className="consultation-item">
+                  <div className="patient-avatar">IS</div>
+                  <div className="consultation-details">
+                    <div className="patient-name">Ignacio Silva Torres</div>
+                    <div className="consultation-complaint">Control post-operatorio, evolución favorable</div>
+                  </div>
+                  <div className="consultation-time">
+                    <div>16:00</div>
+                    <div style={{color: '#f39c12'}}>Programada</div>
+                  </div>
+                </div>
+                
+                <div className="consultation-item">
+                  <div className="patient-avatar">CT</div>
+                  <div className="consultation-details">
+                    <div className="patient-name">Claudia Torres Mendoza</div>
+                    <div className="consultation-complaint">Seguimiento hipertensión arterial</div>
+                  </div>
+                  <div className="consultation-time">
+                    <div>16:30</div>
+                    <div style={{color: '#27ae60'}}>Rutina</div>
+                  </div>
+                </div>
+              </div>
+              
+              <button className="btn-primary" style={{marginTop: '20px'}} onClick={() => setCurrentView('chat')}>
+                <i data-feather="video" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                Atender Próximo Paciente
+              </button>
+            </div>
+          </div>
+        </>
+      );
+
+      // Chat médico profesional
+      const ChatView = () => (
+        <>
+          <div className="chat-header">
+            <button className="back-button" onClick={() => setCurrentView('home')}>
+              <i data-feather="arrow-left"></i>
+            </button>
+            <div>
+              <div className="chat-title">Consulta Médica en Curso</div>
+              <div style={{fontSize: '12px', color: '#7f8c8d'}}>
+                {userType === 'patient' ? 'Dr. Andrés Reyes' : 'María González'} • Sesión encriptada
+              </div>
+            </div>
+            <div className="chat-actions">
+              <button className="action-button">
+                <i data-feather="video" style={{width: '16px', height: '16px'}}></i>
+              </button>
+              <button className="action-button">
+                <i data-feather="phone" style={{width: '16px', height: '16px'}}></i>
+              </button>
+              <button className="action-button">
+                <i data-feather="more-vertical" style={{width: '16px', height: '16px'}}></i>
+              </button>
+            </div>
+          </div>
+          
+          <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100vh - 240px)'}}>
+            <div className="chat-messages">
+              <div className="message user">
+                <div className="message-avatar">P</div>
+                <div className="message-content">
+                  <div className="message-bubble">
+                    Doctor, he estado experimentando dolor en el pecho que aparece especialmente cuando hago esfuerzos. También he notado que me canso más rápido al subir escaleras.
+                  </div>
+                  <div className="message-time">12:45 PM</div>
+                </div>
+              </div>
+              
+              <div className="message">
+                <div className="message-avatar">Dr</div>
+                <div className="message-content">
+                  <div className="message-bubble">
+                    Entiendo su preocupación. ¿Desde cuándo ha estado experimentando estos síntomas? ¿El dolor es punzante, opresivo o como una presión?
+                  </div>
+                  <div className="message-time">12:46 PM</div>
+                </div>
+              </div>
+              
+              <div className="message user">
+                <div className="message-avatar">P</div>
+                <div className="message-content">
+                  <div className="message-bubble">
+                    Comenzó hace aproximadamente una semana. El dolor es más como una opresión, no muy fuerte pero constante cuando camino rápido.
+                  </div>
+                  <div className="message-time">12:47 PM</div>
+                </div>
+              </div>
+            </div>
+            
+            {userType === 'doctor' && (
+              <div className="medical-tools">
+                <button className="tool-button">
+                  <i data-feather="file-text" style={{width: '14px', height: '14px'}}></i>
+                  <span>Historial Clínico</span>
+                </button>
+                <button className="tool-button">
+                  <i data-feather="heart" style={{width: '14px', height: '14px'}}></i>
+                  <span>Signos Vitales</span>
+                </button>
+                <button className="tool-button" onClick={() => setCurrentView('prescription')}>
+                  <i data-feather="clipboard" style={{width: '14px', height: '14px'}}></i>
+                  <span>Prescripción</span>
+                </button>
+              </div>
+            )}
+            
+            <div style={{padding: '16px', borderTop: '1px solid #ecf0f1'}}>
+              <div style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
+                <input 
+                  style={{
+                    flex: 1,
+                    padding: '10px 16px',
+                    border: '1px solid #ecf0f1',
+                    borderRadius: '20px',
+                    fontSize: '14px'
+                  }}
+                  placeholder="Escribir mensaje médico..."
+                />
+                <button style={{
+                  width: '40px',
+                  height: '40px',
+                  background: '#3498db',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <i data-feather="send" style={{width: '16px', height: '16px'}}></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista de prescripción profesional
+      const PrescriptionView = () => (
+        <>
+          <div className="medical-header">
+            <div className="status-bar">
+              <span>8:41</span>
+              <span>●●●● ◯ 📶 🔋</span>
+            </div>
+            <h1>Prescripción Digital</h1>
+            <div className="subtitle">Sistema de Recetas Electrónicas</div>
+          </div>
+          
+          <div className="medical-content">
+            <div style={{padding: '20px'}}>
+              <div className="user-status-card">
+                <div className="user-greeting">Paciente: María González Ruiz</div>
+                <div className="user-details">RUT: 12.345.678-9 • Consulta: #TM-2025-001</div>
+              </div>
+              
+              <div className="consultations-section" style={{margin: '16px 0'}}>
+                <div className="consultations-header">
+                  <i data-feather="pill" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                  Medicamentos Prescritos
+                </div>
+                
+                <div style={{padding: '20px'}}>
+                  <div style={{marginBottom: '20px', padding: '16px', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #ecf0f1'}}>
+                    <h4 style={{color: '#2c3e50', marginBottom: '8px'}}>1. Atorvastatina 20mg</h4>
+                    <div style={{fontSize: '14px', color: '#7f8c8d', lineHeight: '1.6'}}>
+                      <strong>Indicación:</strong> Tomar 1 tableta cada 24 horas después de la cena<br/>
+                      <strong>Duración:</strong> 30 días (renovable)<br/>
+                      <strong>Observaciones:</strong> Control de colesterol
+                    </div>
+                  </div>
+                  
+                  <div style={{marginBottom: '20px', padding: '16px', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #ecf0f1'}}>
+                    <h4 style={{color: '#2c3e50', marginBottom: '8px'}}>2. Aspirina 100mg</h4>
+                    <div style={{fontSize: '14px', color: '#7f8c8d', lineHeight: '1.6'}}>
+                      <strong>Indicación:</strong> Tomar 1 tableta cada 24 horas después del desayuno<br/>
+                      <strong>Duración:</strong> Indefinido (según evolución)<br/>
+                      <strong>Observaciones:</strong> Cardioprotección
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div style={{background: 'white', padding: '16px', borderRadius: '8px', border: '1px solid #ecf0f1', marginBottom: '20px'}}>
+                <h4 style={{color: '#2c3e50', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  <i data-feather="alert-circle" style={{width: '16px', height: '16px', color: '#e74c3c'}}></i>
+                  Recomendaciones Médicas
+                </h4>
+                <ul style={{fontSize: '14px', color: '#7f8c8d', lineHeight: '1.6', paddingLeft: '20px'}}>
+                  <li>Dieta baja en sodio y grasas saturadas</li>
+                  <li>Ejercicio cardiovascular moderado 30 min/día</li>
+                  <li>Control médico en 4 semanas</li>
+                  <li>Acudir a urgencias si presenta dolor torácico intenso</li>
+                </ul>
+              </div>
+              
+              <div style={{display: 'flex', gap: '12px'}}>
+                <button className="btn-primary" style={{flex: 1}} onClick={() => setCurrentView('consultation-end')}>
+                  <i data-feather="check-circle" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                  Firmar y Enviar
+                </button>
+                <button className="btn-secondary">
+                  <i data-feather="plus" style={{width: '16px', height: '16px'}}></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+      // Vista final de consulta
+      const ConsultationEndView = () => (
+        <>
+          <div className="medical-header">
+            <div className="status-bar">
+              <span>8:41</span>
+              <span>●●●● ◯ 📶 🔋</span>
+            </div>
+            <h1>Consulta Finalizada</h1>
+            <div className="subtitle">Documentos Médicos Generados</div>
+          </div>
+          
+          <div className="medical-content">
+            <div style={{padding: '20px', textAlign: 'center'}}>
+              <div style={{
+                width: '80px',
+                height: '80px',
+                background: 'linear-gradient(135deg, #27ae60, #2ecc71)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 20px',
+                color: 'white',
+                fontSize: '32px'
+              }}>
+                <i data-feather="check-circle"></i>
+              </div>
+              
+              <h2 style={{color: '#2c3e50', marginBottom: '8px'}}>Consulta Completada</h2>
+              <p style={{color: '#7f8c8d', marginBottom: '32px'}}>
+                Los documentos médicos han sido generados y enviados
+              </p>
+              
+              <div className="consultations-section" style={{textAlign: 'left', marginBottom: '24px'}}>
+                <div className="consultations-header">
+                  <i data-feather="file-text" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                  Documentos Generados
+                </div>
+                
+                <div className="consultation-item">
+                  <div style={{
+                    width: '44px',
+                    height: '44px',
+                    background: '#e74c3c',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white'
+                  }}>
+                    <i data-feather="file-text" style={{width: '20px', height: '20px'}}></i>
+                  </div>
+                  <div className="consultation-details">
+                    <div className="patient-name">Prescripción Digital Nº TM-2025-001</div>
+                    <div className="consultation-complaint">Firmada digitalmente • Válida legalmente</div>
+                  </div>
+                  <button className="btn-secondary" style={{padding: '8px 12px', fontSize: '12px'}}>
+                    Descargar PDF
+                  </button>
+                </div>
+                
+                <div className="consultation-item">
+                  <div style={{
+                    width: '44px',
+                    height: '44px',
+                    background: '#3498db',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white'
+                  }}>
+                    <i data-feather="clipboard" style={{width: '20px', height: '20px'}}></i>
+                  </div>
+                  <div className="consultation-details">
+                    <div className="patient-name">Certificado de Consulta Médica</div>
+                    <div className="consultation-complaint">Para presentar en seguros o empleador</div>
+                  </div>
+                  <button className="btn-secondary" style={{padding: '8px 12px', fontSize: '12px'}}>
+                    Descargar
+                  </button>
+                </div>
+              </div>
+              
+              <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+                <button className="btn-primary" onClick={() => setCurrentView('home')}>
+                  <i data-feather="home" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                  Volver al Inicio
+                </button>
+                <button className="btn-secondary" style={{width: '100%'}}>
+                  <i data-feather="star" style={{width: '16px', height: '16px', marginRight: '8px'}}></i>
+                  Calificar Consulta
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+      // Navegación inferior
+      const BottomNavigation = () => (
+        <div className="bottom-nav">
+          <button 
+            className={`nav-item ${currentView === 'home' ? 'active' : ''}`}
+            onClick={() => setCurrentView('home')}
+          >
+            <i data-feather="home" className="nav-icon"></i>
+            <div className="nav-label">Inicio</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'search' ? 'active' : ''}`}
+            onClick={() => setCurrentView('search')}
+          >
+            <i data-feather="search" className="nav-icon"></i>
+            <div className="nav-label">Buscar</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'appointments' ? 'active' : ''}`}
+            onClick={() => setCurrentView('appointments')}
+          >
+            <i data-feather="calendar" className="nav-icon"></i>
+            <div className="nav-label">Citas</div>
+          </button>
+          
+          <button 
+            className={`nav-item ${currentView === 'profile' ? 'active' : ''}`}
+            onClick={() => {
+              setUserType(userType === 'patient' ? 'doctor' : 'patient');
+              setCurrentView('home');
+            }}
+          >
+            <i data-feather="user" className="nav-icon"></i>
+            <div className="nav-label">{userType === 'patient' ? 'Paciente' : 'Médico'}</div>
+          </button>
+        </div>
+      );
+
+      // Renderizado principal
+      const renderView = () => {
+        switch(currentView) {
+          case 'chat':
+            return <ChatView />;
+          case 'prescription':
+            return <PrescriptionView />;
+          case 'consultation-end':
+            return <ConsultationEndView />;
+          case 'home':
+          default:
+            return userType === 'patient' ? <PatientHome /> : <DoctorDashboard />;
+        }
+      };
+
+      return (
+        <>
+          {renderView()}
+          {currentView !== 'chat' && currentView !== 'prescription' && currentView !== 'consultation-end' && (
+            <BottomNavigation />
+          )}
+        </>
+      );
+    }
+
+    // Renderizar la aplicación
+    ReactDOM.render(<TeleMedApp />, document.getElementById('telemed-app'));
+  </script>
+
+  <!-- Configuración Firebase -->
+  <script type="text/babel">
+    const firebaseConfig = {
+      apiKey: "demo-project",
+      authDomain: "demo-project.firebaseapp.com", 
+      projectId: "demo-project",
+      storageBucket: "demo-project.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    
+    if (location.hostname === 'localhost') {
+      firebase.auth().useEmulator('http://localhost:9099');
+      firebase.firestore().useEmulator('localhost', 8080);
+    }
+
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+  </script>
+
+</body>
+</html>
