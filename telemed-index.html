@@ -184,15 +184,175 @@
       margin-top: 40px;
     }
     
+    /* Optimización completa para móviles */
     @media (max-width: 768px) {
-      .title {
-        font-size: 2rem;
+      .container {
+        padding: 15px;
+        max-width: 100%;
       }
+      
+      .header {
+        padding: 40px 0 30px 0;
+      }
+      
+      .logo {
+        font-size: 3rem;
+        margin-bottom: 15px;
+      }
+      
+      .title {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        padding: 0 10px;
+      }
+      
+      .quick-access {
+        border-radius: 15px;
+        padding: 25px 20px;
+        margin-bottom: 30px;
+      }
+      
+      .quick-title {
+        font-size: 1.3rem;
+        margin-bottom: 25px;
+      }
+      
       .platforms-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 25px;
       }
+      
+      .platform-card {
+        padding: 20px 15px;
+        border-radius: 12px;
+      }
+      
+      .platform-card:hover {
+        transform: translateY(-2px);
+      }
+      
+      .platform-icon {
+        font-size: 2.2rem;
+        margin-bottom: 12px;
+      }
+      
+      .platform-title {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+      
+      .platform-desc {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+        line-height: 1.4;
+      }
+      
+      .platform-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+      }
+      
+      .main-access {
+        margin-bottom: 30px;
+      }
+      
+      .main-btn {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        margin: 0 10px;
+      }
+      
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 30px;
+      }
+      
+      .feature {
+        padding: 15px;
+        border-radius: 8px;
+      }
+      
+      .feature-icon {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+      }
+      
+      .feature-title {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+      }
+      
+      .feature p {
+        font-size: 0.8rem;
+        line-height: 1.3;
+      }
+      
+      .footer {
+        padding: 20px 15px;
+        border-radius: 8px;
+        margin-top: 30px;
+      }
+      
+      .footer p {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+      }
+      
+      .footer a {
+        font-size: 0.85rem;
+        margin: 0 8px !important;
+      }
+    }
+    
+    /* Para smartphones muy pequeños */
+    @media (max-width: 480px) {
       .container {
         padding: 10px;
+      }
+      
+      .title {
+        font-size: 1.8rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .quick-access {
+        padding: 20px 15px;
+      }
+      
+      .platform-card {
+        padding: 18px 12px;
+      }
+      
+      .features {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .main-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+    }
+    
+    /* Para pantallas muy anchas */
+    @media (min-width: 1200px) {
+      .platforms-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 800px;
+        margin: 0 auto 30px auto;
       }
     }
   </style>
